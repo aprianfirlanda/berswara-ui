@@ -1,0 +1,85 @@
+.container,
+.container-narrow {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+.container {
+  max-width: calc(var(--container-wide) + (var(--page-gutter) * 2));
+}
+
+.container-narrow {
+  max-width: calc(var(--container-narrow) + (var(--page-gutter) * 2));
+}
+
+.section {
+  padding-block: var(--section-space);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-space, var(--space-4));
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cluster-space, var(--space-3));
+}
+
+.auto-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--grid-min, 16rem)), 1fr)
+  );
+  gap: var(--grid-gap, var(--space-5));
+}
+
+.surface {
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.surface-soft {
+  background: var(--color-surface-soft);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+}
+
+.full-bleed {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+}
+
+@media (max-width: 48rem) {
+  .mobile-stack {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .mobile-full-width {
+    width: 100%;
+  }
+}
