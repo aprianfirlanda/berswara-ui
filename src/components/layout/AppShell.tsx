@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
+import { berswaraBusiness } from '../../config/business'
 import { navigationItems } from '../../data/navigation'
 import { BrandLogo } from '../media/BrandLogo'
 import { ChatIcon, CloseIcon, MenuIcon } from '../icons/ShellIcons'
@@ -145,15 +146,15 @@ export function AppShell() {
               <dl className="footer-details">
                 <div>
                   <dt>Area layanan</dt>
-                  <dd>Menunggu konfirmasi</dd>
+                  <dd>{berswaraBusiness.serviceArea}</dd>
                 </div>
                 <div>
                   <dt>Jam layanan</dt>
-                  <dd>Menunggu konfirmasi</dd>
+                  <dd>{berswaraBusiness.hours}</dd>
                 </div>
                 <div>
                   <dt>WhatsApp</dt>
-                  <dd>Nomor resmi belum dipublikasikan</dd>
+                  <dd>{berswaraBusiness.whatsapp.display}</dd>
                 </div>
               </dl>
             </div>
@@ -161,11 +162,16 @@ export function AppShell() {
             <div className="footer-column">
               <h2>Media sosial</h2>
               <p className="footer-placeholder-copy">
-                Tautan resmi akan ditampilkan setelah dikonfirmasi Berswara.
+                Ikuti informasi rental dan produk Berswara.
               </p>
-              <Link className="footer-contact-link" to="/contact">
-                Buka halaman kontak
-              </Link>
+              <a
+                className="footer-contact-link"
+                href={berswaraBusiness.instagram.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {berswaraBusiness.instagram.handle}
+              </a>
             </div>
           </div>
 

@@ -1,0 +1,152 @@
+.contact-page {
+  display: grid;
+  width: 100%;
+  gap: var(--space-10);
+}
+
+.contact-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+  gap: clamp(var(--space-8), 6vw, var(--space-16));
+  align-items: center;
+  padding: clamp(var(--space-8), 7vw, var(--space-20));
+  overflow: hidden;
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at 94% 8%, var(--color-yellow) 0 8rem, transparent 8.1rem),
+    linear-gradient(135deg, var(--color-pink), var(--color-lilac));
+  box-shadow: var(--shadow-md);
+}
+
+.contact-hero h1 {
+  max-width: 16ch;
+}
+
+.contact-hero-copy {
+  max-width: var(--measure-copy);
+  margin-top: var(--space-5);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+}
+
+.contact-product-context {
+  display: grid;
+  width: fit-content;
+  gap: var(--space-1);
+  margin-top: var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-lg);
+  background: rgb(255 255 255 / 72%);
+}
+
+.contact-product-context span,
+.contact-card-kicker {
+  color: var(--color-brand-700);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-extrabold);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.contact-product-context a,
+.contact-service-grid a {
+  color: var(--color-brand-700);
+  font-weight: var(--font-weight-bold);
+}
+
+.contact-chat-card {
+  display: grid;
+  gap: var(--space-4);
+  padding: clamp(var(--space-6), 5vw, var(--space-10));
+  border: var(--border-width-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.contact-chat-card h2,
+.contact-chat-card p {
+  margin: 0;
+}
+
+.contact-chat-card h2 {
+  font-size: clamp(var(--font-size-xl), 4vw, var(--font-size-3xl));
+}
+
+.contact-whatsapp-link {
+  text-decoration: none;
+}
+
+.contact-copy-status {
+  min-height: 1.5em;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.contact-service-section {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.contact-section-heading h2 {
+  max-width: var(--measure-heading);
+}
+
+.contact-service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.contact-service-grid > div {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-6);
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs);
+}
+
+.contact-service-grid dt {
+  color: var(--color-brand-700);
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+.contact-service-grid dd {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.contact-reservation-note {
+  padding: var(--space-6);
+  border-left: 0.35rem solid var(--color-brand-700);
+  border-radius: var(--radius-md);
+  background: var(--color-yellow);
+}
+
+.contact-reservation-note p {
+  margin: var(--space-2) 0 0;
+}
+
+@media (max-width: 52rem) {
+  .contact-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 36rem) {
+  .contact-service-grid {
+    grid-template-columns: 1fr;
+  }
+}
