@@ -16,23 +16,27 @@ const pendingApproval: ApprovalStatus = 'pending-approval'
 const exactDateNote =
   'Ketersediaan untuk tanggal sewa tertentu harus dikonfirmasi langsung oleh Berswara.'
 
-const pendingRate = (category: RentalCategory): RentalRateOption[] => [
-  {
-    id: `${category}-daily-pending`,
-    label: 'Tarif sewa harian — menunggu persetujuan',
+const pendingRate = (category: RentalCategory): RentalRateOption[] =>
+  [
+    { id: '1-day', label: '1 hari', value: 1, unit: 'day' },
+    { id: '3-days', label: '3 hari', value: 3, unit: 'day' },
+    { id: '1-week', label: '1 minggu', value: 1, unit: 'week' },
+    { id: '1-month', label: '1 bulan', value: 1, unit: 'month' },
+  ].map(({ id, label, value, unit }) => ({
+    id: `${category}-${id}-pending`,
+    label,
     amount: null,
-    currency: 'IDR',
-    duration: { value: 1, unit: 'day' },
+    currency: 'IDR' as const,
+    duration: { value, unit: unit as RentalRateOption['duration']['unit'] },
     status: pendingApproval,
-    note: 'Nominal dan pilihan periode sewa belum disetujui untuk publikasi.',
-  },
-]
+    note: 'Nominal dikonfirmasi langsung oleh Berswara sebelum reservasi.',
+  }))
 
 const pendingMinimumDuration = (): RentalDuration => ({
-  value: null,
+  value: 1,
   unit: 'day',
-  status: pendingApproval,
-  note: 'Durasi minimum sewa belum disetujui.',
+  status: 'approved',
+  note: 'Pilihan periode tersedia untuk 1 hari, 3 hari, 1 minggu, dan 1 bulan.',
 })
 
 const pendingDeposit = (): RentalDeposit => ({
@@ -61,8 +65,8 @@ const guidance = (
   status: pendingApproval,
 })
 
-const commonDraftFields = (category: RentalCategory) => ({
-  contentStatus: 'draft' as const,
+const commonPublicFields = (category: RentalCategory) => ({
+  contentStatus: 'approved' as const,
   rateOptions: pendingRate(category),
   minimumRentalDuration: pendingMinimumDuration(),
   maximumRentalDuration: null,
@@ -84,8 +88,8 @@ const commonDraftFields = (category: RentalCategory) => ({
     'Pilihan pengiriman atau pengambilan dikonfirmasi saat inquiry.',
   ),
   featured: false,
-  published: false,
-  updatedAt: '2026-08-03',
+  published: true,
+  updatedAt: '2026-08-04',
 })
 
 export const rentalProducts = [
@@ -96,7 +100,7 @@ export const rentalProducts = [
     summary: 'Stroller lipat ringkas untuk perjalanan bersama anak.',
     description:
       'Cybex Libelle adalah stroller hitam yang dapat dilipat ringkas, dilengkapi kanopi dan fitur pendukung perjalanan.',
-    ...commonDraftFields('stroller'),
+    ...commonPublicFields('stroller'),
     images: [getProductImageAsset('cybex-libelle')],
     features: [
       'Kanopi matahari XXL dengan UPF 50+',
@@ -123,7 +127,7 @@ export const rentalProducts = [
     summary: 'Stroller kabin ringan dan ringkas untuk kebutuhan traveling.',
     description:
       'Cocolatte Pockit Gen 7 merupakan stroller berukuran kabin dengan lipatan ringkas dan roda depan yang dapat berputar.',
-    ...commonDraftFields('stroller'),
+    ...commonPublicFields('stroller'),
     images: [getProductImageAsset('cocolatte-pockit-gen-7')],
     features: [
       'Ukuran kabin yang ringkas',
@@ -153,7 +157,7 @@ export const rentalProducts = [
     summary: 'Stroller dengan arah kursi fleksibel dan posisi duduk atau bersandar.',
     description:
       'Chris Olins Lisbon 630 menawarkan kursi yang dapat menghadap depan atau belakang serta posisi duduk dan bersandar.',
-    ...commonDraftFields('stroller'),
+    ...commonPublicFields('stroller'),
     images: [getProductImageAsset('chris-olins-lisbon-630')],
     features: [
       'Kursi dapat menghadap depan atau belakang',
@@ -179,7 +183,7 @@ export const rentalProducts = [
     summary: 'Earmuff bayi ringan dengan headband dan bantalan yang dapat disesuaikan.',
     description:
       'Scoora Cronos Lite adalah pelindung telinga bayi berwarna ungu dengan bantalan kepala dan telinga yang lembut.',
-    ...commonDraftFields('earmuff'),
+    ...commonPublicFields('earmuff'),
     images: [getProductImageAsset('scoora-cronos-lite')],
     features: [
       'Headband dapat disesuaikan',
@@ -204,7 +208,7 @@ export const rentalProducts = [
     summary: 'Earmuff bayi hitam dengan bantalan lembut dan headband yang dapat diatur.',
     description:
       'Scoora Cronos adalah pelindung telinga bayi berwarna hitam dengan bantalan kepala dan telinga untuk kenyamanan penggunaan.',
-    ...commonDraftFields('earmuff'),
+    ...commonPublicFields('earmuff'),
     images: [getProductImageAsset('scoora-cronos-black')],
     features: [
       'Headband dapat disesuaikan',
@@ -229,7 +233,7 @@ export const rentalProducts = [
     summary: 'Push walker dengan panel aktivitas yang membantu anak belajar berjalan dan bermain.',
     description:
       'Sugar Baby My Circus Baby Walker memadukan pegangan belajar berjalan dengan panel permainan yang dapat dilepas.',
-    ...commonDraftFields('push-walker'),
+    ...commonPublicFields('push-walker'),
     images: [getProductImageAsset('sugar-baby-my-circus-walker')],
     features: [
       'Panel permainan dapat dilepas',
@@ -258,7 +262,7 @@ export const rentalProducts = [
     summary: 'Push walker berbentuk zebra dengan pegangan dan panel aktivitas interaktif.',
     description:
       'Fisher-Price Learn with Me Zebra Walker mendukung aktivitas duduk dan bermain sekaligus latihan berdiri dan berjalan.',
-    ...commonDraftFields('push-walker'),
+    ...commonPublicFields('push-walker'),
     images: [getProductImageAsset('fisher-price-zebra-walker')],
     features: [
       'Pegangan mudah digenggam',
@@ -284,7 +288,7 @@ export const rentalProducts = [
     summary: 'Balance bike berbentuk kelinci untuk aktivitas motorik dan keseimbangan anak.',
     description:
       'Balance Bike Rabbit Labelle merupakan mainan beroda empat untuk aktivitas di dalam atau luar ruangan.',
-    ...commonDraftFields('balance-bike'),
+    ...commonPublicFields('balance-bike'),
     images: [getProductImageAsset('balance-bike-rabbit')],
     features: [
       'Mendukung aktivitas sensorik dan motorik',

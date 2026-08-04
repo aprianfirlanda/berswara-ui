@@ -42,9 +42,9 @@ describe('Not Found recovery', () => {
     expect(markup).not.toContain('stok internal')
   })
 
-  test('uses the same safe recovery for an unpublished product slug', () => {
+  test('uses the same safe recovery for an unknown product slug', () => {
     const markup = renderToStaticMarkup(
-      <MemoryRouter initialEntries={['/products/cybex-libelle']}>
+      <MemoryRouter initialEntries={['/products/not-a-real-product']}>
         <Routes>
           <Route path="/products/:productSlug" element={<ProductDetailPage />} />
         </Routes>
@@ -53,6 +53,6 @@ describe('Not Found recovery', () => {
 
     expect(markup).toContain('Halaman yang dicari belum ditemukan')
     expect(markup).toContain('Jelajahi katalog')
-    expect(markup).not.toContain('Tarif sewa Cybex Libelle')
+    expect(markup).not.toContain('Tarif sewa')
   })
 })

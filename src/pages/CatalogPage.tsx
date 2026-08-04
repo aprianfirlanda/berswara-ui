@@ -105,8 +105,8 @@ export function CatalogPage() {
 
       {isDraftPreview ? (
         <div className="catalog-preview-banner" role="status">
-          Pratinjau development: menampilkan 8 produk draft. Data ini tidak
-          tampil pada build production sebelum disetujui.
+          Pratinjau development aktif. Katalog publik tetap menggunakan
+          pengaman nilai yang belum disetujui.
         </div>
       ) : null}
 

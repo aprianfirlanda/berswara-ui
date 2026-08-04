@@ -51,23 +51,29 @@ export function validateRentalCatalog(products: readonly RentalProduct[]) {
     }
 
     if (product.published) {
-      const hasPendingRequiredContent =
-        product.contentStatus !== 'approved' ||
-        product.rateOptions.some((rate) => rate.status !== 'approved') ||
-        product.minimumRentalDuration.status !== 'approved' ||
-        product.deposit.status !== 'approved' ||
-        product.availability.status !== 'approved' ||
-        product.includedItems.status !== 'approved' ||
-        product.condition.status !== 'approved' ||
-        product.hygiene.status !== 'approved' ||
-        product.logistics.status !== 'approved'
-
-      if (hasPendingRequiredContent) {
-        errors.push(`${product.slug}: draft content cannot be published`)
+      if (product.contentStatus !== 'approved') {
+        errors.push(`${product.slug}: descriptive content must be approved before publication`)
       }
 
-      if (product.includedItems.items.length === 0) {
+      const pendingRateWithoutDisclosure = product.rateOptions.some(
+        (rate) => rate.status === 'pending-approval' && !rate.note,
+      )
+      if (pendingRateWithoutDisclosure) {
+        errors.push(`${product.slug}: pending public rates need a confirmation note`)
+      }
+
+      if (
+        product.includedItems.status === 'approved'
+        && product.includedItems.items.length === 0
+      ) {
         errors.push(`${product.slug}: published products need included items`)
+      }
+
+      if (
+        product.includedItems.status === 'pending-approval'
+        && !product.includedItems.note
+      ) {
+        errors.push(`${product.slug}: pending included items need a confirmation note`)
       }
     }
   }

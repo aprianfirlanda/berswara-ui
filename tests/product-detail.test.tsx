@@ -131,16 +131,24 @@ describe('rental product detail template', () => {
     expect(markup).toContain('alternatif dari kategori yang sama')
   })
 
-  test('unpublished and unknown public slugs render Not Found', () => {
-    const markup = renderToStaticMarkup(
+  test('public products resolve while unknown slugs render Not Found', () => {
+    const productMarkup = renderToStaticMarkup(
       <MemoryRouter initialEntries={['/products/cybex-libelle']}>
         <Routes>
           <Route path="/products/:productSlug" element={<ProductDetailPage />} />
         </Routes>
       </MemoryRouter>,
     )
+    const unknownMarkup = renderToStaticMarkup(
+      <MemoryRouter initialEntries={['/products/not-a-real-product']}>
+        <Routes>
+          <Route path="/products/:productSlug" element={<ProductDetailPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
 
-    expect(markup).toContain('Halaman yang dicari belum ditemukan')
-    expect(markup).not.toContain('Tarif sewa Cybex Libelle')
+    expect(productMarkup).toContain('Tarif sewa Cybex Libelle')
+    expect(productMarkup).toContain('Tarif dikonfirmasi')
+    expect(unknownMarkup).toContain('Halaman yang dicari belum ditemukan')
   })
 })

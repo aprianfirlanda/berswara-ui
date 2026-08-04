@@ -189,14 +189,17 @@ describe('catalog result states', () => {
     expect(empty.match(/Reset pencarian/g)).toHaveLength(1)
   })
 
-  test('production catalog does not expose unapproved draft inventory', () => {
-    expect(getPublishedRentalProducts()).toHaveLength(0)
+  test('production catalog renders all eight public records with safe pending values', () => {
+    expect(getPublishedRentalProducts()).toHaveLength(8)
     const markup = renderToStaticMarkup(
       <MemoryRouter initialEntries={['/catalog']}>
         <CatalogPage />
       </MemoryRouter>,
     )
-    expect(markup).toContain('Katalog sedang disiapkan')
-    expect(markup).not.toContain('rental-product-card')
+    expect(markup.match(/class="rental-product-card"/g)).toHaveLength(8)
+    expect(markup).toContain('Tarif dikonfirmasi')
+    expect(markup).toContain('Minimum sewa:')
+    expect(markup).toContain('1 hari')
+    expect(markup).not.toContain('Rp0')
   })
 })
