@@ -12,6 +12,7 @@ export interface CatalogResultsProps {
   onReset: () => void
   onRetry: () => void
   hasPublishedInventory: boolean
+  productHrefSuffix?: string
 }
 
 export function CatalogResults({
@@ -21,6 +22,7 @@ export function CatalogResults({
   onReset,
   onRetry,
   hasPublishedInventory,
+  productHrefSuffix = '',
 }: CatalogResultsProps) {
   if (status === 'loading') {
     return <LoadingSkeleton count={6} label="Memuat katalog sewa" />
@@ -69,6 +71,7 @@ export function CatalogResults({
           product={product}
           headingLevel={2}
           eagerImage={index < 2}
+          to={`/products/${product.slug}${productHrefSuffix}`}
         />
       ))}
     </div>

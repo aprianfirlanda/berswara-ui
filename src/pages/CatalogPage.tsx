@@ -178,6 +178,7 @@ export function CatalogPage() {
         onReset={resetCatalog}
         onRetry={retryCatalog}
         hasPublishedInventory={sourceProducts.length > 0}
+        productHrefSuffix={isDraftPreview ? '?preview=draft' : undefined}
       />
     </section>
   )

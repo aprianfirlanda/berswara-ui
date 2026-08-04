@@ -170,10 +170,26 @@
 }
 
 .rental-rate-list li {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.rental-rate-option-label {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.rental-rate-value {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: var(--space-1);
+}
+
+.rental-rate-option-note {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 .rental-rate-amount {

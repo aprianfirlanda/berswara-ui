@@ -9,15 +9,17 @@ export interface ProductCardProps {
   product: RentalProduct
   headingLevel?: 2 | 3
   eagerImage?: boolean
+  to?: string
 }
 
 export function ProductCard({
   product,
   headingLevel = 3,
   eagerImage = false,
+  to,
 }: ProductCardProps) {
   const Heading = `h${headingLevel}` as const
-  const href = `/products/${product.slug}`
+  const href = to ?? `/products/${product.slug}`
 
   return (
     <article className="rental-product-card">

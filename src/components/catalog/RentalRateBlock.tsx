@@ -29,10 +29,16 @@ export function RentalRateBlock({
         <ul className="rental-rate-list">
           {rates.map((rate) => (
             <li key={rate.id}>
-              <span className="rental-rate-amount">{formatRentalAmount(rate)}</span>
-              <span className="rental-rate-unit">
-                / {formatRentalDuration(rate.duration)}
+              <span className="rental-rate-option-label">{rate.label}</span>
+              <span className="rental-rate-value">
+                <span className="rental-rate-amount">{formatRentalAmount(rate)}</span>
+                <span className="rental-rate-unit">
+                  / {formatRentalDuration(rate.duration)}
+                </span>
               </span>
+              {!compact && rate.note ? (
+                <span className="rental-rate-option-note">{rate.note}</span>
+              ) : null}
             </li>
           ))}
         </ul>
