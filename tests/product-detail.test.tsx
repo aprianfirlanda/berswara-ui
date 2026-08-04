@@ -140,7 +140,7 @@ describe('rental product detail template', () => {
       </MemoryRouter>,
     )
 
-    expect(markup).toContain('Halaman tidak ditemukan')
+    expect(markup).toContain('Halaman yang dicari belum ditemukan')
     expect(markup).not.toContain('Tarif sewa Cybex Libelle')
   })
 })
