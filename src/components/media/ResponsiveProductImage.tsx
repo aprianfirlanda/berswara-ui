@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { ProductImageAsset } from '../../types/media'
+import { ImageFallback } from './ImageFallback'
 
 interface ResponsiveProductImageProps {
   asset: ProductImageAsset
@@ -14,15 +15,7 @@ export function ResponsiveProductImage({
 
   if (hasError) {
     return (
-      <div
-        className="product-image-fallback"
-        role="img"
-        aria-label={`Foto ${asset.name} belum tersedia`}
-        style={{ aspectRatio: `${asset.width} / ${asset.height}` }}
-      >
-        <img src="/assets/product-image-fallback.svg" alt="" />
-        <span>Foto belum tersedia</span>
-      </div>
+      <ImageFallback name={asset.name} width={asset.width} height={asset.height} />
     )
   }
 

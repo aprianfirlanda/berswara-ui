@@ -8,6 +8,11 @@ import { HomePage } from './pages/HomePage'
 import { HowItWorksPage } from './pages/HowItWorksPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ProductDetailPage } from './pages/ProductDetailPage'
+import { RentalComponentsStoryPage } from './pages/RentalComponentsStoryPage'
+
+const developmentRoutes = import.meta.env.DEV
+  ? [{ path: '__components', element: <RentalComponentsStoryPage /> }]
+  : []
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +26,7 @@ export const router = createBrowserRouter([
       { path: 'how-it-works', element: <HowItWorksPage /> },
       { path: 'about', element: <AboutPage /> },
       { path: 'contact', element: <ContactPage /> },
+      ...developmentRoutes,
       { path: '*', element: <NotFoundPage /> },
     ],
   },

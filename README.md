@@ -13,6 +13,7 @@ Quality checks:
 
 ```bash
 bun run lint
+bun test
 bun run build
 ```
 
@@ -59,6 +60,18 @@ Brand and product media are stored under `public/assets` with stable, descriptiv
 - All seeded products remain `published: false` until APR-6 business content is approved.
 - `validateRentalCatalog` rejects duplicate/invalid slugs, missing categories or images, invalid rates, confirmed exact-date claims, and publishing with pending required content.
 
+## Rental Catalog behavior
+
+The `/catalog` page derives its visible cards exclusively from `getPublishedRentalProducts()`. Search, category, and sorting selections are stored in URL query parameters so filtered links can be shared and opened from Home category actions.
+
+- `q` searches normalized product names, category labels, summaries, descriptions, and features.
+- `category` supports `stroller`, `earmuff`, `push-walker`, and `balance-bike`.
+- `sort` supports recommendations, newest update, and name. Starting-rate sorting appears only when at least one approved numeric rate exists.
+- Invalid query values fall back to safe defaults.
+- Loading, error, no-results, unpublished-catalog, image-fallback, and unavailable-product presentation use shared system components.
+
+During local development, `/catalog?preview=draft` renders the eight seeded draft records for UI testing. Optional `state=loading` or `state=error` parameters exercise feedback states. These development behaviors are disabled in production, where draft products remain hidden until APR-6 approval.
+
 ## Design system foundations
 
 Global styles are split into production-ready layers imported by `src/index.css`:
@@ -78,3 +91,18 @@ Fredoka and Nunito are bundled from `@fontsource`, so typography does not depend
 - At 768 px and below, the header uses an always-visible availability shortcut and an accessible collapsible menu. The menu exposes `aria-expanded`, closes after navigation, and closes with Escape while returning focus to its trigger.
 - The logo image includes intrinsic dimensions to reserve space while loading.
 - The footer includes navigation and clearly labeled placeholders for service area, operating hours, WhatsApp, and social links. These placeholders must be replaced only after official business details are approved.
+
+## Rental component library
+
+Reusable, typed components are exported from `src/components/index.ts` and grouped by purpose:
+
+- `ui`: button and internal-link actions with primary, secondary, ghost, compact, loading, full-width, and disabled variants.
+- `catalog`: product cards, category cards/chips, controlled search, availability badges, and rate blocks.
+- `product`: keyboard-operable single/multiple-image gallery.
+- `content`: breadcrumbs, rental process steps, and policy sections.
+- `feedback`: catalog/detail loading skeletons and reusable empty, error, or informational panels.
+- `media`: responsive product images and a standalone accessible image fallback.
+
+Availability badges use readable labels and symbols in addition to color. Rental-rate blocks always pair the amount or confirmation placeholder with a duration unit and minimum-period statement.
+
+Run `bun test` for representative component state and formatting coverage. During local development, `/__components` provides a visual story page for responsive and keyboard review; it is omitted from production routing.
