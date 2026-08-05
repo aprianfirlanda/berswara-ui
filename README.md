@@ -17,6 +17,24 @@ bun test
 bun run build
 ```
 
+## Automated rental-journey tests
+
+The fast test suite uses Bun's built-in test runner for deterministic catalog,
+product, WhatsApp, Not Found, and responsive-navigation behavior. Playwright
+adds a browser-level rental journey without opening a headed browser:
+
+```bash
+# First time only: download the Chromium test browser.
+bunx playwright install chromium
+
+bun run test:e2e
+bun run test:ci
+```
+
+`test:e2e` starts Vite automatically and verifies Home → Catalog → Product →
+Contact, including the generated WhatsApp URL. The CI workflow runs the same
+commands non-interactively on Chromium.
+
 ## Public routes
 
 | Route | Screen |
