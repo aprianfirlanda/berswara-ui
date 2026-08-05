@@ -42,7 +42,12 @@ const servicePrinciples = [
 ] as const
 
 export function AboutPage() {
-  useDocumentMetadata({ title: 'Tentang Berswara | Rental perlengkapan bayi' })
+  useDocumentMetadata({
+    title: 'Tentang Berswara | Rental perlengkapan bayi',
+    description:
+      'Kenali Berswara, layanan rental perlengkapan bayi untuk kebutuhan sementara keluarga di Bandung.',
+    path: '/about',
+  })
 
   return (
     <article className="about-page">

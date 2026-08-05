@@ -19,11 +19,18 @@ import {
   type CatalogSort,
 } from '../utilities/catalogQuery'
 import { getRentalCategoryLabel } from '../utilities/rentalPresentation'
+import { useDocumentMetadata } from '../utilities/useDocumentMetadata'
 import '../styles/catalog.css'
 
 const defaultStatus: CatalogLoadStatus = 'ready'
 
 export function CatalogPage() {
+  useDocumentMetadata({
+    title: 'Katalog sewa perlengkapan bayi | Berswara',
+    description:
+      'Lihat pilihan stroller, earmuff, push walker, dan balance bike Berswara. Ketersediaan tanggal dikonfirmasi melalui WhatsApp.',
+    path: '/catalog',
+  })
   const [searchParams, setSearchParams] = useSearchParams()
   const sourceProducts = getPublishedRentalProducts()
   const sortOptions = getCatalogSortOptions(sourceProducts)

@@ -58,6 +58,20 @@ The application uses browser-based client routing, so production hosting must re
 
 If another host is selected, add its equivalent SPA fallback before deployment.
 
+## SEO and sharing
+
+Every public route updates its Bahasa Indonesia title, description, canonical URL,
+Open Graph, and Twitter metadata. Published product pages also include
+product-specific sharing information and truthful `Service` structured data for
+rental—not a sales product or confirmed booking.
+
+`public/sitemap.xml` and `public/robots.txt` list only public pages and the six
+approved products. Not Found and unpublished product routes use `noindex`.
+
+The current Vercel default is `https://berswara.vercel.app`. If a custom domain
+is connected, set `VITE_SITE_URL` to that full HTTPS origin and update the two
+public indexing files before the next production deployment.
+
 ## Image assets
 
 Brand and product media are stored under `public/assets` with stable, descriptive filenames.

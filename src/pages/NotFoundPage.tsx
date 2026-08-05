@@ -9,6 +9,7 @@ export function NotFoundPage() {
 
   useDocumentMetadata({
     title: 'Halaman Tidak Ditemukan | Berswara',
+    description: 'Halaman Berswara yang diminta tidak tersedia.',
     robots: 'noindex, nofollow',
   })
 

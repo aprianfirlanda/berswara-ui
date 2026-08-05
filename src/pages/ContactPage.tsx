@@ -41,7 +41,12 @@ export function ContactPage() {
       })
     : null
 
-  useDocumentMetadata({ title: 'Kontak & Layanan | Berswara' })
+  useDocumentMetadata({
+    title: 'Kontak & layanan rental | Berswara',
+    description:
+      'Hubungi Berswara melalui WhatsApp untuk menanyakan ketersediaan rental perlengkapan bayi di Kota Bandung dan Kabupaten Bandung.',
+    path: '/contact',
+  })
 
   const copyPhoneNumber = async () => {
     try {

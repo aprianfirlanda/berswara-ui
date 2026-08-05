@@ -11,6 +11,7 @@ import {
 } from '../data/rentalProducts'
 import type { RentalProduct } from '../types/catalog'
 import { getHomeFeaturedProducts } from '../utilities/homePage'
+import { useDocumentMetadata } from '../utilities/useDocumentMetadata'
 
 const categories = [
   {
@@ -67,6 +68,11 @@ const heroProducts = [
 ]
 
 export function HomePage() {
+  useDocumentMetadata({
+    title: 'Berswara | Rental perlengkapan bayi Bandung',
+    description:
+      'Sewa stroller, earmuff, push walker, dan balance bike untuk keluarga di Kota Bandung dan Kabupaten Bandung.',
+  })
   const featuredProducts = getHomeFeaturedProducts(
     getPublishedRentalProducts(),
   )

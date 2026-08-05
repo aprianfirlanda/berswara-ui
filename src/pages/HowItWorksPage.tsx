@@ -82,7 +82,12 @@ const deliveryOptions = [
 ] as const
 
 export function HowItWorksPage() {
-  useDocumentMetadata({ title: 'Cara sewa & ketentuan rental | Berswara' })
+  useDocumentMetadata({
+    title: 'Cara sewa & ketentuan rental | Berswara',
+    description:
+      'Pahami cara sewa perlengkapan bayi Berswara: pilih produk, kirim tanggal, tunggu konfirmasi, lalu sepakati serah terima.',
+    path: '/how-it-works',
+  })
   const whatsAppUrl = buildWhatsAppUrl({ variant: 'general' })
 
   return (
