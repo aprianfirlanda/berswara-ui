@@ -105,7 +105,9 @@ export function HomePage() {
             >
               <ResponsiveProductImage
                 asset={product.images[0]}
-                loading={index < 2 ? 'eager' : 'lazy'}
+                loading={index === 0 ? 'eager' : 'lazy'}
+                fetchPriority={index === 0 ? 'high' : 'low'}
+                sizes="(max-width: 560px) 42vw, (max-width: 960px) 28vw, 260px"
               />
               <figcaption>{product.name}</figcaption>
             </figure>
@@ -171,11 +173,10 @@ export function HomePage() {
 
         {featuredProducts.length > 0 ? (
           <div className="home-featured-grid">
-            {featuredProducts.map((product, index) => (
+            {featuredProducts.map((product) => (
               <ProductCard
                 key={product.slug}
                 product={product}
-                eagerImage={index === 0}
               />
             ))}
           </div>

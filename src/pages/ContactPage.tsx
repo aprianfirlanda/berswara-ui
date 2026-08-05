@@ -10,6 +10,7 @@ import {
   trackWhatsAppInquiry,
   type WhatsAppInquiryVariant,
 } from '../utilities/whatsapp'
+import '../styles/contact.css'
 
 export function ContactPage() {
   const [searchParams] = useSearchParams()

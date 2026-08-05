@@ -7,6 +7,7 @@ import {
   CategoryChip,
   ProductCard,
   RentalRateBlock,
+  ResponsiveProductImage,
   SearchInput,
   StatePanel,
 } from '../src/components'
@@ -94,6 +95,32 @@ describe('interactive component states', () => {
 })
 
 describe('composed rental components', () => {
+  test('media exposes explicit LCP priority and responsive source hints', () => {
+    const markup = renderToStaticMarkup(
+      <ResponsiveProductImage
+        asset={rentalProducts[0].images[0]}
+        loading="eager"
+        fetchPriority="high"
+        sizes="42vw"
+      />,
+    )
+
+    expect(markup).toContain('fetchPriority="high"')
+    expect(markup).toContain('loading="eager"')
+    expect(markup).toContain('sizes="42vw"')
+    expect(markup).toContain('480w')
+    expect(markup).toContain('800w')
+  })
+
+  test('noncritical media remains lazy by default', () => {
+    const markup = renderToStaticMarkup(
+      <ResponsiveProductImage asset={rentalProducts[1].images[0]} />,
+    )
+
+    expect(markup).toContain('loading="lazy"')
+    expect(markup).not.toContain('fetchPriority="high"')
+  })
+
   test('rate block renders amount unit and minimum period together', () => {
     const markup = renderToStaticMarkup(
       <RentalRateBlock

@@ -20,6 +20,7 @@ import {
   type CatalogSort,
 } from '../utilities/catalogQuery'
 import { getRentalCategoryLabel } from '../utilities/rentalPresentation'
+import '../styles/catalog.css'
 
 const defaultStatus: CatalogLoadStatus = 'ready'
 

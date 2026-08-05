@@ -1,17 +1,43 @@
+import { Suspense, type ComponentType } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import { AppShell } from './components/layout/AppShell'
 import { RouteErrorBoundary } from './components/routing/RouteErrorBoundary'
-import { AboutPage } from './pages/AboutPage'
-import { CatalogPage } from './pages/CatalogPage'
-import { ContactPage } from './pages/ContactPage'
 import { HomePage } from './pages/HomePage'
-import { HowItWorksPage } from './pages/HowItWorksPage'
-import { NotFoundPage } from './pages/NotFoundPage'
-import { ProductDetailPage } from './pages/ProductDetailPage'
-import { RentalComponentsStoryPage } from './pages/RentalComponentsStoryPage'
+import {
+  DeferredAboutPage,
+  DeferredCatalogPage,
+  DeferredContactPage,
+  DeferredHowItWorksPage,
+  DeferredNotFoundPage,
+  DeferredProductDetailPage,
+} from './pages/deferredPages'
+
+function deferredPage(Page: ComponentType) {
+  return (
+    <Suspense
+      fallback={
+        <div className="route-loading" role="status" aria-live="polite">
+          Memuat halaman…
+        </div>
+      }
+    >
+      <Page />
+    </Suspense>
+  )
+}
 
 const developmentRoutes = import.meta.env.DEV
-  ? [{ path: '__components', element: <RentalComponentsStoryPage /> }]
+  ? [
+      {
+        path: '__components',
+        lazy: async () => {
+          const { RentalComponentsStoryPage } = await import(
+            './pages/RentalComponentsStoryPage'
+          )
+          return { Component: RentalComponentsStoryPage }
+        },
+      },
+    ]
   : []
 
 export const router = createBrowserRouter([
@@ -21,13 +47,16 @@ export const router = createBrowserRouter([
     errorElement: <RouteErrorBoundary />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: 'catalog', element: <CatalogPage /> },
-      { path: 'products/:productSlug', element: <ProductDetailPage /> },
-      { path: 'how-it-works', element: <HowItWorksPage /> },
-      { path: 'about', element: <AboutPage /> },
-      { path: 'contact', element: <ContactPage /> },
+      { path: 'catalog', element: deferredPage(DeferredCatalogPage) },
+      {
+        path: 'products/:productSlug',
+        element: deferredPage(DeferredProductDetailPage),
+      },
+      { path: 'how-it-works', element: deferredPage(DeferredHowItWorksPage) },
+      { path: 'about', element: deferredPage(DeferredAboutPage) },
+      { path: 'contact', element: deferredPage(DeferredContactPage) },
       ...developmentRoutes,
-      { path: '*', element: <NotFoundPage /> },
+      { path: '*', element: deferredPage(DeferredNotFoundPage) },
     ],
   },
 ])

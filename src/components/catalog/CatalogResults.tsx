@@ -70,7 +70,7 @@ export function CatalogResults({
           key={product.slug}
           product={product}
           headingLevel={2}
-          eagerImage={index < 2}
+          eagerImage={index === 0}
           to={`/products/${product.slug}${productHrefSuffix}`}
         />
       ))}

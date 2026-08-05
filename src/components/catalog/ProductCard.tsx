@@ -27,6 +27,7 @@ export function ProductCard({
         <ResponsiveProductImage
           asset={product.images[0]}
           loading={eagerImage ? 'eager' : 'lazy'}
+          fetchPriority={eagerImage ? 'high' : 'auto'}
         />
       </Link>
       <div className="rental-product-body">

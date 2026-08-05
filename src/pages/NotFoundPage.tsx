@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { ButtonLink } from '../components'
 import { BrandLogo } from '../components/media/BrandLogo'
 import { useDocumentMetadata } from '../utilities/useDocumentMetadata'
+import '../styles/not-found.css'
 
 export function NotFoundPage() {
   const headingRef = useRef<HTMLHeadingElement>(null)

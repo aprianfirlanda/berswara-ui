@@ -9,6 +9,7 @@ import {
 } from '../components'
 import type { RentalProduct } from '../types/catalog'
 import { getRentalCategoryLabel } from '../utilities/rentalPresentation'
+import '../styles/product-detail.css'
 
 const idrFormatter = new Intl.NumberFormat('id-ID', {
   style: 'currency',

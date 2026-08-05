@@ -23,7 +23,12 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
   return (
     <section className="product-gallery" aria-label={`Galeri ${productName}`}>
       <div className="product-gallery-stage" id={`${galleryId}-stage`}>
-        <ResponsiveProductImage asset={activeImage} loading="eager" />
+        <ResponsiveProductImage
+          asset={activeImage}
+          loading="eager"
+          fetchPriority="high"
+          sizes="(max-width: 760px) calc(100vw - 3rem), 45vw"
+        />
       </div>
       {images.length > 1 ? (
         <div
