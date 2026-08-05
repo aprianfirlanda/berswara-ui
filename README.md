@@ -110,7 +110,7 @@ rental—not a sales product or confirmed booking.
 `public/sitemap.xml` and `public/robots.txt` list only public pages and the six
 approved products. Not Found and unpublished product routes use `noindex`.
 
-The current Vercel default is `https://berswara.vercel.app`. If a custom domain
+The production Vercel domain is `https://berswara-ui.vercel.app`. If a custom domain
 is connected, set `VITE_SITE_URL` to that full HTTPS origin and update the two
 public indexing files before the next production deployment.
 

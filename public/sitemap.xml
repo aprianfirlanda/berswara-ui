@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://berswara.vercel.app/</loc></url>
-  <url><loc>https://berswara.vercel.app/catalog</loc></url>
-  <url><loc>https://berswara.vercel.app/how-it-works</loc></url>
-  <url><loc>https://berswara.vercel.app/about</loc></url>
-  <url><loc>https://berswara.vercel.app/contact</loc></url>
-  <url><loc>https://berswara.vercel.app/products/cybex-libelle</loc></url>
-  <url><loc>https://berswara.vercel.app/products/cocolatte-pockit-gen-7</loc></url>
-  <url><loc>https://berswara.vercel.app/products/scoora-cronos-lite</loc></url>
-  <url><loc>https://berswara.vercel.app/products/scoora-cronos-black</loc></url>
-  <url><loc>https://berswara.vercel.app/products/fisher-price-zebra-walker</loc></url>
-  <url><loc>https://berswara.vercel.app/products/balance-bike-rabbit-labelle</loc></url>
+  <url><loc>https://berswara-ui.vercel.app/</loc></url>
+  <url><loc>https://berswara-ui.vercel.app/catalog</loc></url>
+  <url><loc>https://berswara-ui.vercel.app/how-it-works</loc></url>
+  <url><loc>https://berswara-ui.vercel.app/about</loc></url>
+  <url><loc>https://berswara-ui.vercel.app/contact</loc></url>
+  <url><loc>https://berswara-ui.vercel.app/products/cybex-libelle</loc></url>
+  <url><loc>https://berswara-ui.vercel.app/products/cocolatte-pockit-gen-7</loc></url>
+  <url><loc>https://berswara-ui.vercel.app/products/scoora-cronos-lite</loc></url>
+  <url><loc>https://berswara-ui.vercel.app/products/scoora-cronos-black</loc></url>
+  <url><loc>https://berswara-ui.vercel.app/products/fisher-price-zebra-walker</loc></url>
+  <url><loc>https://berswara-ui.vercel.app/products/balance-bike-rabbit-labelle</loc></url>
 </urlset>
