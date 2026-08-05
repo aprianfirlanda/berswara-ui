@@ -58,6 +58,48 @@ The application uses browser-based client routing, so production hosting must re
 
 If another host is selected, add its equivalent SPA fallback before deployment.
 
+### Vercel production setup
+
+This repository is deployed from the `berswara-ui` directory. In the Vercel
+project, set **Root Directory** to `berswara-ui`; Vercel can then use the Bun
+lockfile and the default `bun run build` command. The committed `vercel.json`
+provides the SPA fallback, cache policy, and static-site security headers.
+
+Before the next production deployment, add this Vercel Production environment
+variable (no trailing slash):
+
+```text
+VITE_SITE_URL=https://your-production-domain.example
+```
+
+Use the same value in preview if previews need accurate canonical metadata.
+Never commit a real environment file; `.env.example` documents the expected
+shape and `.env.local` is ignored.
+
+GitHub pull requests and pushes to `main` run the root workflow at
+`.github/workflows/berswara-ui-ci.yml`. It installs from the lockfile, runs
+linting, all Bun tests, the production build, and Playwright.
+
+### Launch smoke test and rollback
+
+After Vercel reports a Production deployment, run the browser smoke test against
+the actual HTTPS domain:
+
+```bash
+cd berswara-ui
+PLAYWRIGHT_BASE_URL="https://your-production-domain.example" \
+  bunx playwright test tests/e2e/production-smoke.e2e.ts
+```
+
+Confirm the Vercel deployment uses HTTPS, the custom-domain redirect (if one is
+configured), direct navigation to each public route, canonical/robots/sitemap
+URLs, and the WhatsApp inquiry link. The smoke test covers all direct public
+routes plus Catalog → Product → Contact → WhatsApp.
+
+To roll back, open **Vercel → Deployments**, select the last known-good
+Production deployment, and use **Promote to Production**. Repeat the smoke test
+after promotion and record the deployment URL and reason for the rollback.
+
 ## SEO and sharing
 
 Every public route updates its Bahasa Indonesia title, description, canonical URL,

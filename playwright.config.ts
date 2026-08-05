@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 
+const productionBaseUrl = process.env.PLAYWRIGHT_BASE_URL
+
 export default defineConfig({
   testDir: './tests/e2e',
   testMatch: '**/*.e2e.ts',
@@ -8,7 +10,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4173',
+    baseURL: productionBaseUrl ?? 'http://127.0.0.1:4173',
     channel: process.env.PLAYWRIGHT_CHANNEL,
     trace: 'on-first-retry',
   },
@@ -18,9 +20,11 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  webServer: {
-    command: 'bun run dev -- --host 127.0.0.1 --port 4173',
-    url: 'http://127.0.0.1:4173',
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: productionBaseUrl
+    ? undefined
+    : {
+        command: 'bun run dev -- --host 127.0.0.1 --port 4173',
+        url: 'http://127.0.0.1:4173',
+        reuseExistingServer: !process.env.CI,
+      },
 })

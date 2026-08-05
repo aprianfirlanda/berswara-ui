@@ -6,10 +6,10 @@ test('a product route supplies product-specific sharing and canonical metadata',
   await page.goto('/products/cybex-libelle')
 
   await expect(page).toHaveTitle('Sewa Cybex Libelle | Berswara')
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-    'href',
-    'https://berswara.vercel.app/products/cybex-libelle',
-  )
+  const canonicalHref = await page
+    .locator('link[rel="canonical"]')
+    .getAttribute('href')
+  expect(new URL(canonicalHref!).pathname).toBe('/products/cybex-libelle')
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute(
     'content',
     'product',
@@ -18,9 +18,11 @@ test('a product route supplies product-specific sharing and canonical metadata',
     'content',
     'Sewa Cybex Libelle | Berswara',
   )
-  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
-    'content',
-    'https://berswara.vercel.app/assets/products/cybex-libelle-1200.webp',
+  const openGraphImage = await page
+    .locator('meta[property="og:image"]')
+    .getAttribute('content')
+  expect(new URL(openGraphImage!).pathname).toBe(
+    '/assets/products/cybex-libelle-1200.webp',
   )
 
   const structuredData = await page
