@@ -69,14 +69,15 @@ Brand and product media are stored under `public/assets` with stable, descriptiv
 
 ## Rental catalog data
 
-`src/data/rentalProducts.ts` is the typed source of truth for the eight supplied rental products. It supports catalog cards, filters, detail pages, related products, and WhatsApp inquiry context.
+`src/data/rentalProducts.ts` is the typed source of truth for the six approved rental products. It supports catalog cards, filters, detail pages, related products, and WhatsApp inquiry context.
 
 - Required fields are enforced by `RentalProduct` and the `satisfies` operator.
-- Currency is fixed to IDR and every rate includes a duration value and unit.
+- Currency is fixed to IDR and every approved rate includes a duration value and unit.
 - Exact-date availability always requires Berswara confirmation.
-- Unapproved prices, minimum periods, deposits, condition, hygiene, included items, and logistics use `pending-approval` with no fabricated monetary amount.
-- All seeded products remain `published: false` until APR-6 business content is approved.
-- `validateRentalCatalog` rejects duplicate/invalid slugs, missing categories or images, invalid rates, confirmed exact-date claims, and publishing with pending required content.
+- Every retained product has approved rates, an approved minimum rental period, and no deposit.
+- Chris Olins Lisbon 630 and Sugar Baby My Circus Baby Walker are not published in the public catalog.
+- Exact-date availability, condition, included items, hygiene, and final logistics are confirmed by Berswara through WhatsApp before reservation.
+- `validateRentalCatalog` rejects duplicate/invalid slugs, missing categories or images, invalid rates, and confirmed exact-date claims.
 
 ## Rental Catalog behavior
 
@@ -88,7 +89,7 @@ The `/catalog` page derives its visible cards exclusively from `getPublishedRent
 - Invalid query values fall back to safe defaults.
 - Loading, error, no-results, unpublished-catalog, image-fallback, and unavailable-product presentation use shared system components.
 
-During local development, `/catalog?preview=draft` renders the eight seeded draft records for UI testing. Optional `state=loading` or `state=error` parameters exercise feedback states. These development behaviors are disabled in production, where draft products remain hidden until APR-6 approval.
+During local development, optional `state=loading` or `state=error` parameters exercise feedback states. These development behaviors are disabled in production.
 
 ## Design system foundations
 

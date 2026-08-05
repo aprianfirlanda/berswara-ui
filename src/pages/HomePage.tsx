@@ -63,7 +63,7 @@ function requireHeroProduct(slug: string): RentalProduct {
 const heroProducts = [
   requireHeroProduct('cybex-libelle'),
   requireHeroProduct('scoora-cronos-lite'),
-  requireHeroProduct('sugar-baby-my-circus-walker'),
+  requireHeroProduct('fisher-price-zebra-walker'),
 ]
 
 export function HomePage() {

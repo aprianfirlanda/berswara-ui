@@ -47,16 +47,6 @@
   font-size: var(--font-size-sm);
 }
 
-.catalog-preview-banner {
-  padding: var(--space-3) var(--space-4);
-  border: var(--border-width-thin) solid var(--color-lilac-strong);
-  border-radius: var(--radius-md);
-  color: var(--color-lilac-strong);
-  background: var(--color-lilac);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-}
-
 .catalog-controls {
   display: grid;
   grid-template-columns: minmax(16rem, 1.15fr) minmax(0, 2fr) minmax(12rem, 0.65fr);

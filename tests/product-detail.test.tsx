@@ -83,7 +83,7 @@ describe('product detail selection', () => {
 
     expect(related).toHaveLength(4)
     expect(related.some((product) => product.slug === current.slug)).toBe(false)
-    expect(related.slice(0, 2).every((product) => product.category === 'stroller')).toBe(true)
+    expect(related[0].category).toBe('stroller')
   })
 })
 
@@ -148,7 +148,8 @@ describe('rental product detail template', () => {
     )
 
     expect(productMarkup).toContain('Tarif sewa Cybex Libelle')
-    expect(productMarkup).toContain('Tarif dikonfirmasi')
+    expect(productMarkup).toContain('Rp200.000')
+    expect(productMarkup).toContain('Tidak ada deposit')
     expect(unknownMarkup).toContain('Halaman yang dicari belum ditemukan')
   })
 })

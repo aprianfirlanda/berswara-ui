@@ -73,3 +73,13 @@ test('rental policy disclosures are usable from the How It Works page', async ({
     .getAttribute('href')
   expect(whatsAppHref).toContain('https://wa.me/6281991582500?text=')
 })
+
+test('the public catalog exposes only approved products and published rates', async ({ page }) => {
+  await page.goto('/catalog')
+
+  await expect(page.locator('.rental-product-card')).toHaveCount(6)
+  await expect(page.getByText(/200\.000/).first()).toBeVisible()
+  await expect(page.getByText(/25\.000/).first()).toBeVisible()
+  await expect(page.getByText('Sugar Baby My Circus Baby Walker')).toHaveCount(0)
+  await expect(page.getByText('Tarif dikonfirmasi')).toHaveCount(0)
+})

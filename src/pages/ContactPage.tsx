@@ -61,7 +61,8 @@ export function ContactPage() {
             Tanyakan produk dan tanggal sewa lewat kanal resmi kami.
           </h1>
           <p className="contact-hero-copy">
-            Berswara melayani rental perlengkapan bayi di Kota Bandung.
+            Berswara melayani rental perlengkapan bayi di Kota Bandung dan
+            Kabupaten Bandung.
             Ketersediaan, total biaya, deposit, dan logistik selalu dikonfirmasi
             sebelum reservasi disetujui.
           </p>
@@ -69,7 +70,7 @@ export function ContactPage() {
             <div className="contact-product-context" role="status">
               <span>Produk yang ditanyakan</span>
               <strong>{product.name}</strong>
-              <Link to={`/products/${product.slug}?preview=draft`}>
+              <Link to={`/products/${product.slug}`}>
                 Lihat kembali detail produk
               </Link>
             </div>

@@ -7,7 +7,6 @@ import {
 } from '../components'
 import {
   getPublishedRentalProducts,
-  rentalProducts,
 } from '../data/rentalProducts'
 import { rentalCategories } from '../types/catalog'
 import {
@@ -26,11 +25,7 @@ const defaultStatus: CatalogLoadStatus = 'ready'
 
 export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const isDraftPreview =
-    import.meta.env.DEV && searchParams.get('preview') === 'draft'
-  const sourceProducts = isDraftPreview
-    ? rentalProducts
-    : getPublishedRentalProducts()
+  const sourceProducts = getPublishedRentalProducts()
   const sortOptions = getCatalogSortOptions(sourceProducts)
   const search = searchParams.get('q') ?? ''
   const category = parseCatalogCategory(searchParams.get('category'))
@@ -78,10 +73,7 @@ export function CatalogPage() {
   }
 
   const resetCatalog = () => {
-    const next = new URLSearchParams()
-    const preview = searchParams.get('preview')
-    if (preview) next.set('preview', preview)
-    setSearchParams(next, { replace: true })
+    setSearchParams(new URLSearchParams(), { replace: true })
   }
 
   const retryCatalog = () => updateSearchParams({ state: '' })
@@ -103,13 +95,6 @@ export function CatalogPage() {
           <p>Status pada katalog adalah panduan umum, bukan konfirmasi booking.</p>
         </aside>
       </header>
-
-      {isDraftPreview ? (
-        <div className="catalog-preview-banner" role="status">
-          Pratinjau development aktif. Katalog publik tetap menggunakan
-          pengaman nilai yang belum disetujui.
-        </div>
-      ) : null}
 
       <section className="catalog-controls" aria-label="Cari dan filter katalog">
         <SearchInput
@@ -179,7 +164,6 @@ export function CatalogPage() {
         onReset={resetCatalog}
         onRetry={retryCatalog}
         hasPublishedInventory={sourceProducts.length > 0}
-        productHrefSuffix={isDraftPreview ? '?preview=draft' : undefined}
       />
     </section>
   )

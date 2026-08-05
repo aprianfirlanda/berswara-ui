@@ -18,6 +18,10 @@ const idrFormatter = new Intl.NumberFormat('id-ID', {
 })
 
 function formatDeposit(product: RentalProduct) {
+  if (product.deposit.status === 'approved' && product.deposit.amount === null) {
+    return 'Tidak ada deposit'
+  }
+
   return product.deposit.amount === null
     ? 'Dikonfirmasi Berswara'
     : idrFormatter.format(product.deposit.amount)
@@ -61,30 +65,20 @@ function getGuidanceFacts(product: RentalProduct) {
 export interface RentalProductDetailProps {
   product: RentalProduct
   relatedProducts: readonly RentalProduct[]
-  isDraftPreview?: boolean
 }
 
 export function RentalProductDetail({
   product,
   relatedProducts,
-  isDraftPreview = false,
 }: RentalProductDetailProps) {
   const categoryLabel = getRentalCategoryLabel(product.category)
   const guidanceFacts = getGuidanceFacts(product)
   const isUnavailable =
     product.availability.indicator === 'currently-unavailable'
-  const previewSuffix = isDraftPreview ? '?preview=draft' : ''
   const contactUrl = `/contact?product=${encodeURIComponent(product.slug)}`
 
   return (
     <article className="product-detail-page">
-      {isDraftPreview ? (
-        <div className="product-detail-preview-banner" role="status">
-          Pratinjau development: data produk ini masih draft dan tidak dapat
-          diakses melalui build production.
-        </div>
-      ) : null}
-
       <Breadcrumbs
         items={[
           { label: 'Beranda', to: '/' },
@@ -237,23 +231,33 @@ export function RentalProductDetail({
         </div>
       </section>
 
-      <section className="product-detail-operations" aria-labelledby="operations-heading">
-        <div className="product-section-heading">
-          <p className="eyebrow">Sebelum disewa</p>
-          <h2 id="operations-heading">Kondisi, kebersihan, dan serah terima.</h2>
-        </div>
-        <div className="product-policy-grid">
-          <PolicySection title="Kondisi unit" eyebrow="Pemeriksaan" icon="◎">
-            <p>{product.condition.value}</p>
-          </PolicySection>
-          <PolicySection title="Kebersihan" eyebrow="Perawatan" icon="✦">
-            <p>{product.hygiene.value}</p>
-          </PolicySection>
-          <PolicySection title="Pengiriman atau pickup" eyebrow="Logistik" icon="↔">
-            <p>{product.logistics.value}</p>
-          </PolicySection>
-        </div>
-      </section>
+      {product.condition.status === 'approved'
+      || product.hygiene.status === 'approved'
+      || product.logistics.status === 'approved' ? (
+        <section className="product-detail-operations" aria-labelledby="operations-heading">
+          <div className="product-section-heading">
+            <p className="eyebrow">Sebelum disewa</p>
+            <h2 id="operations-heading">Kondisi, kebersihan, dan serah terima.</h2>
+          </div>
+          <div className="product-policy-grid">
+            {product.condition.status === 'approved' ? (
+              <PolicySection title="Kondisi unit" eyebrow="Pemeriksaan" icon="◎">
+                <p>{product.condition.value}</p>
+              </PolicySection>
+            ) : null}
+            {product.hygiene.status === 'approved' ? (
+              <PolicySection title="Kebersihan" eyebrow="Perawatan" icon="✦">
+                <p>{product.hygiene.value}</p>
+              </PolicySection>
+            ) : null}
+            {product.logistics.status === 'approved' ? (
+              <PolicySection title="Pengiriman atau pickup" eyebrow="Logistik" icon="↔">
+                <p>{product.logistics.value}</p>
+              </PolicySection>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
 
       <section className="product-safety-section" aria-labelledby="safety-heading">
         <div>
@@ -277,7 +281,7 @@ export function RentalProductDetail({
           <h2 id="detail-process-heading">Pahami proses rental sebelum bertanya.</h2>
           <p>
             Lihat cara konfirmasi tanggal, pembayaran, serah terima,
-            pengembalian, pemeriksaan, dan penyelesaian deposit.
+            pengembalian, dan ketentuan rental.
           </p>
         </div>
         <ButtonLink to="/how-it-works" variant="secondary">
@@ -305,7 +309,7 @@ export function RentalProductDetail({
               <ProductCard
                 key={relatedProduct.slug}
                 product={relatedProduct}
-                to={`/products/${relatedProduct.slug}${previewSuffix}`}
+                to={`/products/${relatedProduct.slug}`}
               />
             ))}
           </div>

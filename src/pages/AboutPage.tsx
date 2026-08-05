@@ -125,12 +125,12 @@ export function AboutPage() {
       <section className="about-operations" aria-labelledby="about-operations-heading">
         <div className="about-operations-copy">
           <p className="eyebrow">Sebelum serah terima</p>
-          <h2 id="about-operations-heading">Kebersihan, kondisi, dan detail unit diperiksa lebih dahulu.</h2>
+          <h2 id="about-operations-heading">Detail unit dan serah terima dikonfirmasi lebih dahulu.</h2>
           <p>
-            Berswara menyiapkan unit berdasarkan jenis perlengkapannya dan
-            mengecek kelengkapan serta kondisi aktual sebelum diserahkan.
-            Kondisi unit didokumentasikan saat serah terima agar kedua pihak
-            memiliki acuan yang sama.
+            Informasi kondisi unit, kelengkapan, kebersihan, dan pemeriksaan
+            dikonfirmasi admin untuk tiap rental sebelum serah terima. Dengan
+            begitu, keluarga mengetahui detail yang berlaku untuk unit dan
+            jadwal yang dipilih.
           </p>
           <p>
             Untuk penggunaan yang aman, keluarga tetap perlu mengikuti
@@ -143,8 +143,8 @@ export function AboutPage() {
           <div>
             <strong>Detail akhir dikonfirmasi bersama</strong>
             <p>
-              Ketersediaan, total biaya, deposit, dan kondisi unit tidak
-              ditetapkan otomatis oleh website.
+              Ketersediaan, total biaya, detail unit, dan cara serah terima
+              tidak ditetapkan otomatis oleh website.
             </p>
           </div>
         </aside>

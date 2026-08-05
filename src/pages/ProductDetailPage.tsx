@@ -1,8 +1,5 @@
-import { useParams, useSearchParams } from 'react-router-dom'
-import {
-  getPublishedRentalProducts,
-  rentalProducts,
-} from '../data/rentalProducts'
+import { useParams } from 'react-router-dom'
+import { getPublishedRentalProducts } from '../data/rentalProducts'
 import {
   getRelatedRentalProducts,
   getRentalProductFromSource,
@@ -12,12 +9,7 @@ import { RentalProductDetail } from './RentalProductDetail'
 
 export function ProductDetailPage() {
   const { productSlug = '' } = useParams()
-  const [searchParams] = useSearchParams()
-  const isDraftPreview =
-    import.meta.env.DEV && searchParams.get('preview') === 'draft'
-  const sourceProducts = isDraftPreview
-    ? rentalProducts
-    : getPublishedRentalProducts()
+  const sourceProducts = getPublishedRentalProducts()
   const product = getRentalProductFromSource(productSlug, sourceProducts)
 
   if (!product) {
@@ -28,7 +20,6 @@ export function ProductDetailPage() {
     <RentalProductDetail
       product={product}
       relatedProducts={getRelatedRentalProducts(product, sourceProducts)}
-      isDraftPreview={isDraftPreview}
     />
   )
 }

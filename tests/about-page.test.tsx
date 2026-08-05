@@ -24,8 +24,8 @@ describe('About Berswara page', () => {
       </MemoryRouter>,
     )
 
-    expect(markup).toContain('kelengkapan serta kondisi aktual')
-    expect(markup).toContain('Kebersihan, kondisi, dan detail unit')
+    expect(markup).toContain('kondisi unit, kelengkapan, kebersihan, dan pemeriksaan')
+    expect(markup).toContain('Detail unit dan serah terima')
     expect(markup).toContain(berswaraBusiness.serviceArea)
     expect(markup).toContain(berswaraBusiness.delivery)
     expect(markup).toContain(berswaraBusiness.pickup)

@@ -1,6 +1,5 @@
 import { getProductImageAsset } from './productAssets'
 import type {
-  ApprovalStatus,
   ManagedList,
   ManagedText,
   ProductGuidance,
@@ -12,84 +11,81 @@ import type {
 } from '../types/catalog'
 import { validateRentalCatalog } from '../utilities/validateRentalCatalog'
 
-const pendingApproval: ApprovalStatus = 'pending-approval'
 const exactDateNote =
-  'Ketersediaan untuk tanggal sewa tertentu harus dikonfirmasi langsung oleh Berswara.'
+  'Ketersediaan untuk tanggal sewa tertentu dikonfirmasi langsung oleh Berswara melalui WhatsApp.'
 
-const pendingRate = (category: RentalCategory): RentalRateOption[] =>
-  [
-    { id: '1-day', label: '1 hari', value: 1, unit: 'day' },
-    { id: '3-days', label: '3 hari', value: 3, unit: 'day' },
-    { id: '1-week', label: '1 minggu', value: 1, unit: 'week' },
-    { id: '1-month', label: '1 bulan', value: 1, unit: 'month' },
-  ].map(({ id, label, value, unit }) => ({
-    id: `${category}-${id}-pending`,
+type ApprovedRate = readonly [label: string, amount: number, value: number, unit: 'day' | 'month']
+
+const approvedRates = (
+  slug: string,
+  values: readonly ApprovedRate[],
+): RentalRateOption[] =>
+  values.map(([label, amount, value, unit]) => ({
+    id: `${slug}-${value}-${unit}`,
     label,
-    amount: null,
-    currency: 'IDR' as const,
-    duration: { value, unit: unit as RentalRateOption['duration']['unit'] },
-    status: pendingApproval,
-    note: 'Nominal dikonfirmasi langsung oleh Berswara sebelum reservasi.',
+    amount,
+    currency: 'IDR',
+    duration: { value, unit },
+    status: 'approved',
   }))
 
-const pendingMinimumDuration = (): RentalDuration => ({
-  value: 1,
-  unit: 'day',
+const minimumDuration = (value: number, unit: 'day' | 'month'): RentalDuration => ({
+  value,
+  unit,
   status: 'approved',
-  note: 'Pilihan periode tersedia untuk 1 hari, 3 hari, 1 minggu, dan 1 bulan.',
 })
 
-const pendingDeposit = (): RentalDeposit => ({
+const noDeposit = (): RentalDeposit => ({
   amount: null,
   currency: 'IDR',
   refundable: true,
-  status: pendingApproval,
-  note: 'Nominal dan ketentuan deposit dikonfirmasi saat inquiry.',
+  status: 'approved',
+  note: 'Semua produk Berswara tidak memakai deposit.',
 })
 
-const pendingIncludedItems = (): ManagedList => ({
-  items: [],
-  status: pendingApproval,
-  note: 'Daftar barang dan aksesori yang disertakan belum disetujui.',
-})
-
-const pendingOperations = (value: string): ManagedText => ({
+const confirmWithAdmin = (value: string): ManagedText => ({
   value,
-  status: pendingApproval,
+  status: 'pending-approval',
 })
 
-const guidance = (
-  values: Omit<ProductGuidance, 'status'>,
-): ProductGuidance => ({
+const includedItems = (): ManagedList => ({
+  items: [],
+  status: 'pending-approval',
+  note: 'Kelengkapan unit dikonfirmasi admin melalui WhatsApp sebelum reservasi.',
+})
+
+const guidance = (values: Omit<ProductGuidance, 'status'>): ProductGuidance => ({
   ...values,
-  status: pendingApproval,
+  status: 'approved',
 })
 
-const commonPublicFields = (category: RentalCategory) => ({
+const commonPublicFields = (
+  minimum: RentalDuration,
+  featured: boolean,
+) => ({
   contentStatus: 'approved' as const,
-  rateOptions: pendingRate(category),
-  minimumRentalDuration: pendingMinimumDuration(),
+  minimumRentalDuration: minimum,
   maximumRentalDuration: null,
-  deposit: pendingDeposit(),
+  deposit: noDeposit(),
   availability: {
     indicator: 'available-to-request' as const,
-    status: pendingApproval,
+    status: 'approved' as const,
     exactDateConfirmationRequired: true as const,
     note: exactDateNote,
   },
-  includedItems: pendingIncludedItems(),
-  condition: pendingOperations(
-    'Kondisi unit aktual dikonfirmasi dan didokumentasikan sebelum serah terima.',
+  includedItems: includedItems(),
+  condition: confirmWithAdmin(
+    'Kondisi unit dikonfirmasi admin sesuai rental sebelum serah terima.',
   ),
-  hygiene: pendingOperations(
-    'Proses kebersihan dan inspeksi menunggu persetujuan operasional Berswara.',
+  hygiene: confirmWithAdmin(
+    'Informasi kebersihan dan pemeriksaan dikonfirmasi admin sebelum serah terima.',
   ),
-  logistics: pendingOperations(
-    'Pilihan pengiriman atau pengambilan dikonfirmasi saat inquiry.',
+  logistics: confirmWithAdmin(
+    'Pilihan pengiriman atau pickup dikonfirmasi admin melalui WhatsApp.',
   ),
-  featured: false,
+  featured,
   published: true,
-  updatedAt: '2026-08-04',
+  updatedAt: '2026-08-05',
 })
 
 export const rentalProducts = [
@@ -99,51 +95,69 @@ export const rentalProducts = [
     category: 'stroller',
     summary: 'Stroller lipat ringkas untuk perjalanan bersama anak.',
     description:
-      'Cybex Libelle adalah stroller hitam yang dapat dilipat ringkas, dilengkapi kanopi dan fitur pendukung perjalanan.',
-    ...commonPublicFields('stroller'),
+      'Cybex Libelle adalah stroller ringkas dengan kanopi XXL, harness lima titik, dan suspensi roda depan untuk kebutuhan perjalanan.',
+    ...commonPublicFields(minimumDuration(3, 'day'), true),
+    rateOptions: approvedRates('cybex-libelle', [
+      ['3 hari', 200_000, 3, 'day'],
+      ['7 hari', 275_000, 7, 'day'],
+      ['14 hari', 345_000, 14, 'day'],
+      ['30 hari', 415_000, 30, 'day'],
+    ]),
     images: [getProductImageAsset('cybex-libelle')],
     features: [
       'Kanopi matahari XXL dengan UPF 50+',
+      'One-pull harness dan harness lima titik berbantalan',
+      'Sandaran kaki dapat disesuaikan',
       'Suspensi roda depan',
-      'Harness lima titik dengan bantalan',
-      'Dapat dilipat ringkas',
+      'Dapat dilipat dan berdiri tegak untuk penyimpanan',
     ],
-    specifications: [{ label: 'Warna', value: 'Hitam' }],
+    specifications: [
+      { label: 'Berat stroller', value: '6,2 kg' },
+      { label: 'Dimensi terbuka', value: '71 × 52 × 102 cm' },
+      { label: 'Dimensi terlipat', value: '32 × 20 × 48 cm' },
+    ],
     guidance: guidance({
       minimumAgeMonths: 6,
       maximumWeightKg: 25,
       stages: ['Duduk dengan bantuan stroller'],
-      note: 'Panduan pada materi produk; tetap ikuti petunjuk penggunaan produsen.',
+      note: 'Cocok mulai usia 6 bulan hingga berat anak 25 kg; tetap ikuti petunjuk penggunaan produsen.',
     }),
     careAndSafetyNotes: [
       'Gunakan harness sesuai petunjuk produsen.',
-      'Batas usia dan berat perlu dikonfirmasi sebelum sewa.',
+      'Pastikan stroller terkunci sempurna sebelum digunakan.',
     ],
   },
   {
     slug: 'cocolatte-pockit-gen-7',
     name: 'Cocolatte Pockit Gen 7',
     category: 'stroller',
-    summary: 'Stroller kabin ringan dan ringkas untuk kebutuhan traveling.',
+    summary: 'Stroller compact untuk bepergian dengan lipatan satu tangan.',
     description:
-      'Cocolatte Pockit Gen 7 merupakan stroller berukuran kabin dengan lipatan ringkas dan roda depan yang dapat berputar.',
-    ...commonPublicFields('stroller'),
+      'Cocolatte Pockit Gen 7 adalah stroller compact dengan kanopi, tas perjalanan, keranjang penyimpanan, dan roda depan 360 derajat.',
+    ...commonPublicFields(minimumDuration(3, 'day'), false),
+    rateOptions: approvedRates('cocolatte-pockit-gen-7', [
+      ['3 hari', 125_000, 3, 'day'],
+      ['7 hari', 200_000, 7, 'day'],
+      ['14 hari', 235_000, 14, 'day'],
+      ['30 hari', 325_000, 30, 'day'],
+    ]),
     images: [getProductImageAsset('cocolatte-pockit-gen-7')],
     features: [
-      'Ukuran kabin yang ringkas',
-      'Dapat dibawa sebagai tas backpack',
-      'Roda depan dapat berputar',
-      'Posisi lipat padat',
+      'Kanopi matahari, tas perjalanan, dan keranjang penyimpanan',
+      'Sabuk pengaman lima titik',
+      'Dorongan dan sistem lipat satu tangan',
+      'Roda depan 360 derajat dengan lock system',
+      'Suspensi roda depan dan belakang',
     ],
     specifications: [
-      { label: 'Berat stroller', value: '6 kg' },
-      { label: 'Warna', value: 'Hitam dan hijau zaitun' },
+      { label: 'Berat stroller', value: 'Sekitar 5,5–6 kg' },
+      { label: 'Kapasitas', value: 'Hingga sekitar 20 kg' },
+      { label: 'Dimensi terbuka', value: 'Sekitar 80 × 45 × 100 cm' },
+      { label: 'Dimensi terlipat', value: 'Sekitar 60 × 45 × 25 cm' },
     ],
     guidance: guidance({
-      minimumAgeMonths: 6,
-      maximumAgeMonths: 36,
-      stages: ['Duduk dengan bantuan stroller'],
-      note: 'Rentang usia berasal dari materi produk dan perlu dikonfirmasi.',
+      stages: [],
+      note: 'Kesesuaian usia dan ketentuan bagasi kabin dikonfirmasi melalui WhatsApp atau kepada maskapai.',
     }),
     careAndSafetyNotes: [
       'Pastikan stroller terkunci sempurna setelah dibuka.',
@@ -151,50 +165,36 @@ export const rentalProducts = [
     ],
   },
   {
-    slug: 'chris-olins-lisbon-630',
-    name: 'Chris Olins Lisbon 630',
-    category: 'stroller',
-    summary: 'Stroller dengan arah kursi fleksibel dan posisi duduk atau bersandar.',
-    description:
-      'Chris Olins Lisbon 630 menawarkan kursi yang dapat menghadap depan atau belakang serta posisi duduk dan bersandar.',
-    ...commonPublicFields('stroller'),
-    images: [getProductImageAsset('chris-olins-lisbon-630')],
-    features: [
-      'Kursi dapat menghadap depan atau belakang',
-      'Posisi duduk dan bersandar',
-      'Dapat dilipat ringkas',
-    ],
-    specifications: [{ label: 'Warna', value: 'Biru tua' }],
-    guidance: guidance({
-      minimumAgeMonths: 6,
-      maximumWeightKg: 50,
-      stages: ['Duduk dengan bantuan stroller'],
-      note: 'Panduan berasal dari materi produk dan perlu dikonfirmasi.',
-    }),
-    careAndSafetyNotes: [
-      'Kunci posisi kursi sebelum digunakan.',
-      'Batas berat perlu dikonfirmasi sebelum sewa.',
-    ],
-  },
-  {
     slug: 'scoora-cronos-lite',
     name: 'Scoora Cronos Lite',
     category: 'earmuff',
-    summary: 'Earmuff bayi ringan dengan headband dan bantalan yang dapat disesuaikan.',
+    summary: 'Earmuff ringan dengan headband lembut dan bantalan telinga empuk.',
     description:
-      'Scoora Cronos Lite adalah pelindung telinga bayi berwarna ungu dengan bantalan kepala dan telinga yang lembut.',
-    ...commonPublicFields('earmuff'),
+      'Scoora Cronos Lite adalah hearing protection untuk anak dengan headband fleksibel yang dapat disesuaikan dan bantalan telinga lembut.',
+    ...commonPublicFields(minimumDuration(3, 'day'), false),
+    rateOptions: approvedRates('scoora-cronos-lite', [
+      ['3 hari', 25_000, 3, 'day'],
+      ['7 hari', 45_000, 7, 'day'],
+      ['14 hari', 55_000, 14, 'day'],
+      ['30 hari', 65_000, 30, 'day'],
+    ]),
     images: [getProductImageAsset('scoora-cronos-lite')],
     features: [
-      'Headband dapat disesuaikan',
-      'Headband berbantalan',
-      'Bantalan telinga berbahan foam lembut',
-      'Lapisan luar tahan pakai',
+      'Headband lembut, fleksibel, dan dapat disesuaikan',
+      'Bantalan busa empuk di sekitar telinga',
+      'Ringan dan mudah dibawa',
+      'Membantu meredam suara bising',
+      'Material durable ABS',
     ],
-    specifications: [{ label: 'Warna', value: 'Ungu dan abu-abu' }],
+    specifications: [
+      { label: 'Usia rujukan', value: '0–4 tahun' },
+      { label: 'Berat', value: '195 gram' },
+      { label: 'Ukuran', value: '18 × 18 × 8 cm' },
+      { label: 'Tipe', value: 'Hearing protection' },
+    ],
     guidance: guidance({
       stages: ['Perlindungan telinga saat berada di lingkungan ramai'],
-      note: 'Kesesuaian ukuran dan usia harus dikonfirmasi sebelum penggunaan.',
+      note: 'Kesesuaian ukuran dan usia perlu dikonfirmasi sebelum penggunaan.',
     }),
     careAndSafetyNotes: [
       'Pastikan headband nyaman dan tidak terlalu ketat.',
@@ -205,21 +205,33 @@ export const rentalProducts = [
     slug: 'scoora-cronos-black',
     name: 'Scoora Cronos',
     category: 'earmuff',
-    summary: 'Earmuff bayi hitam dengan bantalan lembut dan headband yang dapat diatur.',
+    summary: 'Earmuff hitam dengan headband lembut dan bantalan telinga empuk.',
     description:
-      'Scoora Cronos adalah pelindung telinga bayi berwarna hitam dengan bantalan kepala dan telinga untuk kenyamanan penggunaan.',
-    ...commonPublicFields('earmuff'),
+      'Scoora Cronos adalah hearing protection anak dengan headband fleksibel yang dapat disesuaikan dan bantalan telinga lembut.',
+    ...commonPublicFields(minimumDuration(3, 'day'), true),
+    rateOptions: approvedRates('scoora-cronos-black', [
+      ['3 hari', 25_000, 3, 'day'],
+      ['7 hari', 45_000, 7, 'day'],
+      ['14 hari', 55_000, 14, 'day'],
+      ['30 hari', 65_000, 30, 'day'],
+    ]),
     images: [getProductImageAsset('scoora-cronos-black')],
     features: [
-      'Headband dapat disesuaikan',
-      'Headband berbantalan',
-      'Bantalan telinga berbahan foam lembut',
-      'Lapisan luar tahan pakai',
+      'Headband lembut, fleksibel, dan dapat disesuaikan',
+      'Bantalan busa empuk di sekitar telinga',
+      'Ringan dan mudah dibawa',
+      'Membantu meredam suara bising',
+      'Material durable ABS',
     ],
-    specifications: [{ label: 'Warna', value: 'Hitam' }],
+    specifications: [
+      { label: 'Usia rujukan', value: '0–4 tahun' },
+      { label: 'Berat', value: '195 gram' },
+      { label: 'Ukuran', value: '18 × 18 × 8 cm' },
+      { label: 'Tipe', value: 'Hearing protection' },
+    ],
     guidance: guidance({
       stages: ['Perlindungan telinga saat berada di lingkungan ramai'],
-      note: 'Kesesuaian ukuran dan usia harus dikonfirmasi sebelum penggunaan.',
+      note: 'Kesesuaian ukuran dan usia perlu dikonfirmasi sebelum penggunaan.',
     }),
     careAndSafetyNotes: [
       'Pastikan headband nyaman dan tidak terlalu ketat.',
@@ -227,54 +239,29 @@ export const rentalProducts = [
     ],
   },
   {
-    slug: 'sugar-baby-my-circus-walker',
-    name: 'Sugar Baby My Circus Baby Walker',
-    category: 'push-walker',
-    summary: 'Push walker dengan panel aktivitas yang membantu anak belajar berjalan dan bermain.',
-    description:
-      'Sugar Baby My Circus Baby Walker memadukan pegangan belajar berjalan dengan panel permainan yang dapat dilepas.',
-    ...commonPublicFields('push-walker'),
-    images: [getProductImageAsset('sugar-baby-my-circus-walker')],
-    features: [
-      'Panel permainan dapat dilepas',
-      'Papan tulis',
-      'Piano yang dapat dilepas',
-      'Shape sorter',
-      'Roda gigi yang dapat diputar',
-    ],
-    specifications: [
-      { label: 'Penggunaan', value: 'Tampak samping dan belakang pada materi produk' },
-      { label: 'Standar pada materi produk', value: 'Bebas BPA dan EN71' },
-    ],
-    guidance: guidance({
-      stages: ['Belajar berjalan', 'Perkembangan sensori'],
-      note: 'Tahap perkembangan dan pengawasan perlu dikonfirmasi sebelum sewa.',
-    }),
-    careAndSafetyNotes: [
-      'Gunakan hanya dengan pengawasan orang dewasa.',
-      'Gunakan di permukaan datar dan jauh dari tangga.',
-    ],
-  },
-  {
     slug: 'fisher-price-zebra-walker',
     name: 'Fisher-Price Learn with Me Zebra Walker',
     category: 'push-walker',
-    summary: 'Push walker berbentuk zebra dengan pegangan dan panel aktivitas interaktif.',
+    summary: 'Baby walker interaktif untuk duduk, bermain, berdiri, dan berjalan.',
     description:
-      'Fisher-Price Learn with Me Zebra Walker mendukung aktivitas duduk dan bermain sekaligus latihan berdiri dan berjalan.',
-    ...commonPublicFields('push-walker'),
+      'Fisher-Price Learn with Me Zebra Walker membantu anak usia 6 bulan ke atas belajar berdiri dan berjalan sambil mengembangkan motorik kasar, keseimbangan, dan koordinasi.',
+    ...commonPublicFields(minimumDuration(1, 'month'), true),
+    rateOptions: approvedRates('fisher-price-zebra-walker', [
+      ['1 bulan', 60_000, 1, 'month'],
+      ['2 bulan', 100_000, 2, 'month'],
+    ]),
     images: [getProductImageAsset('fisher-price-zebra-walker')],
     features: [
-      'Pegangan mudah digenggam',
-      'Roda stabil',
-      'Panel aktivitas interaktif',
-      'Buku dengan halaman yang dapat diputar',
-      'Lagu dan frasa sing-along',
+      'Dua mode: duduk dan bermain, serta berdiri dan berjalan',
+      'Pegangan ergonomis dan empat roda stabil',
+      'Tombol interaktif dan musik edukatif',
+      'Halaman buku dan lampu',
     ],
     specifications: [{ label: 'Bentuk', value: 'Zebra' }],
     guidance: guidance({
+      minimumAgeMonths: 6,
       stages: ['Duduk dan bermain', 'Belajar berdiri', 'Belajar berjalan'],
-      note: 'Tahap perkembangan dan pengawasan perlu dikonfirmasi sebelum sewa.',
+      note: 'Gunakan sesuai tahap perkembangan anak dan dengan pengawasan orang dewasa.',
     }),
     careAndSafetyNotes: [
       'Gunakan hanya dengan pengawasan orang dewasa.',
@@ -287,23 +274,30 @@ export const rentalProducts = [
     category: 'balance-bike',
     summary: 'Balance bike berbentuk kelinci untuk aktivitas motorik dan keseimbangan anak.',
     description:
-      'Balance Bike Rabbit Labelle merupakan mainan beroda empat untuk aktivitas di dalam atau luar ruangan.',
-    ...commonPublicFields('balance-bike'),
+      'Balance Bike Rabbit Labelle adalah mainan beroda untuk aktivitas di dalam atau luar ruangan serta latihan sensorik, motorik, dan keseimbangan.',
+    ...commonPublicFields(minimumDuration(1, 'month'), false),
+    rateOptions: approvedRates('balance-bike-rabbit-labelle', [
+      ['1 bulan', 50_000, 1, 'month'],
+      ['2 bulan', 85_000, 2, 'month'],
+    ]),
     images: [getProductImageAsset('balance-bike-rabbit')],
     features: [
-      'Mendukung aktivitas sensorik dan motorik',
-      'Mendukung latihan keseimbangan',
-      'Dapat dimainkan di dalam atau luar ruangan',
-      'Bahan disebut food grade dan bebas BPA pada materi produk',
+      'Dapat dimainkan di dalam dan luar ruangan',
+      'Membantu mengembangkan sensorik, motorik, dan keseimbangan',
+      'Food grade, bebas BPA, dan tidak beracun',
+      'Mudah dipasang dan dibersihkan',
+      'Anti-UV dan tidak berkarat',
     ],
     specifications: [
-      { label: 'Bentuk', value: 'Kelinci' },
-      { label: 'Warna', value: 'Putih, merah muda, dan ungu' },
+      { label: 'Standar', value: 'SNI' },
+      { label: 'Berat anak maksimum', value: '30 kg' },
+      { label: 'Ukuran produk', value: '49,5 × 24 × 38 cm' },
+      { label: 'Ukuran dus', value: '49 × 21 × 27 cm' },
     ],
     guidance: guidance({
       maximumWeightKg: 30,
       stages: ['Latihan motorik', 'Latihan keseimbangan'],
-      note: 'Batas berat berasal dari materi produk dan perlu dikonfirmasi.',
+      note: 'Gunakan dengan pengawasan orang dewasa.',
     }),
     careAndSafetyNotes: [
       'Gunakan hanya dengan pengawasan orang dewasa.',

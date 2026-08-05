@@ -69,10 +69,9 @@ describe('catalog query behavior', () => {
       sort: 'name',
     })
 
-    expect(results).toHaveLength(2)
+    expect(results).toHaveLength(1)
     expect(results.map((product) => product.name)).toEqual([
       'Fisher-Price Learn with Me Zebra Walker',
-      'Sugar Baby My Circus Baby Walker',
     ])
     expect(rentalProducts.map((product) => product.slug)).toEqual(originalOrder)
   })
@@ -80,7 +79,20 @@ describe('catalog query behavior', () => {
   test('sorts approved starting rates and keeps pending rates last', () => {
     const low = withApprovedRate(rentalProducts[0], 50_000)
     const high = withApprovedRate(rentalProducts[1], 100_000)
-    const pending = rentalProducts[2]
+    const pending: RentalProduct = {
+      ...rentalProducts[2],
+      rateOptions: [
+        {
+          id: `${rentalProducts[2].slug}-pending-test`,
+          label: '3 hari',
+          amount: null,
+          currency: 'IDR',
+          duration: { value: 3, unit: 'day' },
+          status: 'pending-approval',
+          note: 'Tarif dikonfirmasi oleh Berswara.',
+        },
+      ],
+    }
     const results = filterAndSortCatalog([high, pending, low], {
       ...queryDefaults,
       sort: 'starting-rate',
@@ -93,12 +105,12 @@ describe('catalog query behavior', () => {
     ])
   })
 
-  test('only offers starting-rate sorting when approved values exist', () => {
+  test('offers starting-rate sorting for the approved public catalog', () => {
     expect(
       getCatalogSortOptions(rentalProducts).some(
         (option) => option.value === 'starting-rate',
       ),
-    ).toBe(false)
+    ).toBe(true)
     expect(
       getCatalogSortOptions([withApprovedRate(rentalProducts[0], 50_000)]).some(
         (option) => option.value === 'starting-rate',
@@ -110,23 +122,23 @@ describe('catalog query behavior', () => {
     const options = getCatalogSortOptions(rentalProducts)
     expect(parseCatalogCategory('invalid')).toBe('all')
     expect(parseCatalogCategory('stroller')).toBe('stroller')
-    expect(parseCatalogSort('starting-rate', options)).toBe('featured')
+    expect(parseCatalogSort('starting-rate', options)).toBe('starting-rate')
     expect(parseCatalogSort('newest', options)).toBe('newest')
   })
 
   test('counts every category from the same source collection', () => {
     expect(getCategoryCounts(rentalProducts)).toEqual({
-      all: 8,
-      stroller: 3,
+      all: 6,
+      stroller: 2,
       earmuff: 2,
-      'push-walker': 2,
+      'push-walker': 1,
       'balance-bike': 1,
     })
   })
 })
 
 describe('catalog result states', () => {
-  test('renders all eight supplied items when the source marks them visible', () => {
+  test('renders all six approved items when the source marks them visible', () => {
     const visibleProducts = rentalProducts.map((product) => ({
       ...product,
       published: true,
@@ -144,7 +156,7 @@ describe('catalog result states', () => {
       </MemoryRouter>,
     )
 
-    expect(markup.match(/class="rental-product-card"/g)).toHaveLength(8)
+    expect(markup.match(/class="rental-product-card"/g)).toHaveLength(6)
     for (const product of rentalProducts) {
       expect(markup).toContain(product.name)
     }
@@ -189,17 +201,17 @@ describe('catalog result states', () => {
     expect(empty.match(/Reset pencarian/g)).toHaveLength(1)
   })
 
-  test('production catalog renders all eight public records with safe pending values', () => {
-    expect(getPublishedRentalProducts()).toHaveLength(8)
+  test('production catalog renders six approved public records with published rates', () => {
+    expect(getPublishedRentalProducts()).toHaveLength(6)
     const markup = renderToStaticMarkup(
       <MemoryRouter initialEntries={['/catalog']}>
         <CatalogPage />
       </MemoryRouter>,
     )
-    expect(markup.match(/class="rental-product-card"/g)).toHaveLength(8)
-    expect(markup).toContain('Tarif dikonfirmasi')
+    expect(markup.match(/class="rental-product-card"/g)).toHaveLength(6)
+    expect(markup).toContain('Rp200.000')
     expect(markup).toContain('Minimum sewa:')
-    expect(markup).toContain('1 hari')
-    expect(markup).not.toContain('Rp0')
+    expect(markup).toContain('3 hari')
+    expect(markup).not.toContain('Tarif dikonfirmasi')
   })
 })

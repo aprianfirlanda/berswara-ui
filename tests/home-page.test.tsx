@@ -37,7 +37,7 @@ describe('Berswara Home page', () => {
     }
   })
 
-  test('shows public product cards without inventing pending rental amounts', () => {
+  test('shows public product cards with approved rental amounts', () => {
     const markup = renderToStaticMarkup(
       <MemoryRouter>
         <HomePage />
@@ -45,8 +45,9 @@ describe('Berswara Home page', () => {
     )
 
     expect(markup.match(/class="rental-product-card"/g)).toHaveLength(3)
-    expect(markup).toContain('Tarif dikonfirmasi')
-    expect(markup).not.toMatch(/Rp\s*0/)
+    expect(markup).toContain('Rp200.000')
+    expect(markup).toContain('Rp25.000')
+    expect(markup).not.toContain('Tarif dikonfirmasi')
   })
 
   test('selects featured published records from the shared rental source', () => {
