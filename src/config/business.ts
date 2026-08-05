@@ -3,15 +3,16 @@ export const berswaraBusiness = {
     display: '+62 819-9158-2500',
     digits: '6281991582500',
   },
-  hours: 'Setiap hari, 09.00–17.00 WIB',
-  serviceArea: 'Kota Bandung',
+  hours: 'Senin–Sabtu, 07.00–17.00 WIB; Minggu libur',
+  serviceArea: 'Kota Bandung dan Kabupaten Bandung',
   pickup:
-    'Pickup tersedia. Lokasi dan waktu serah terima dikonfirmasi melalui WhatsApp.',
+    'Self-pickup gratis tersedia. Alamat serta waktu serah terima dikonfirmasi melalui WhatsApp setelah jadwal disepakati.',
   delivery:
-    'Delivery tersedia di Kota Bandung. Biaya mengikuti jarak dan dikonfirmasi sebelum reservasi.',
+    'Delivery dan pickup tersedia di Kota Bandung dan Kabupaten Bandung. Pilihan layanan serta biaya akhir dikonfirmasi sebelum reservasi.',
   publicAddress: null,
   instagram: {
     handle: '@berswara.baby.rental',
     url: 'https://www.instagram.com/berswara.baby.rental/',
   },
+  shopee: 'https://id.shp.ee/CxYkRRBu',
 } as const

@@ -1,0 +1,262 @@
+.how-it-works-page {
+  display: grid;
+  width: 100%;
+  gap: var(--section-space);
+}
+
+.how-it-works-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+  gap: clamp(var(--space-8), 7vw, var(--space-16));
+  align-items: center;
+  overflow: hidden;
+  padding: clamp(var(--space-8), 7vw, var(--space-16));
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at 95% 10%, rgb(255 255 255 / 80%) 0 6.5rem, transparent 6.6rem),
+    linear-gradient(135deg, #e5d7f1, #f3d6dd 55%, #f6e0a6);
+  box-shadow: var(--shadow-md);
+}
+
+.how-it-works-hero h1,
+.how-it-works-section-heading h2,
+.how-it-works-final-cta h2 {
+  max-width: 16ch;
+}
+
+.how-it-works-hero > div > p:not(.eyebrow) {
+  max-width: var(--measure-copy);
+  margin-top: var(--space-5);
+  color: var(--color-text-muted);
+  font-size: clamp(var(--font-size-lg), 2vw, var(--font-size-xl));
+}
+
+.how-it-works-hero-actions,
+.how-it-works-final-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+.how-it-works-hero-actions a {
+  text-decoration: none;
+}
+
+.how-it-works-inquiry-note {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-4);
+  padding: clamp(var(--space-6), 5vw, var(--space-10));
+  border: var(--border-width-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-xl);
+  background: rgb(255 255 255 / 78%);
+  box-shadow: var(--shadow-sm);
+}
+
+.how-it-works-inquiry-note > span {
+  color: var(--color-lilac-strong);
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.how-it-works-inquiry-note strong {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-xl);
+}
+
+.how-it-works-inquiry-note p,
+.how-it-works-section-heading p,
+.how-it-works-final-cta p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.how-it-works-journey,
+.how-it-works-delivery,
+.how-it-works-policies {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.how-it-works-section-heading {
+  max-width: var(--measure-copy);
+}
+
+.how-it-works-section-heading h2 {
+  margin-top: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.how-it-works-journey .process-steps ol {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.how-it-works-delivery {
+  padding: clamp(var(--space-8), 6vw, var(--space-16));
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-soft);
+}
+
+.how-it-works-delivery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.how-it-works-delivery-grid article {
+  min-width: 0;
+  padding: var(--space-5);
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs);
+}
+
+.how-it-works-delivery-grid span {
+  display: block;
+  margin-bottom: var(--space-5);
+  color: var(--color-brand-700);
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.how-it-works-delivery-grid h3 {
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-lg);
+}
+
+.how-it-works-delivery-grid p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.how-it-works-policy-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.how-it-works-policy-list details {
+  overflow: hidden;
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs);
+}
+
+.how-it-works-policy-list summary {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  min-height: 4.5rem;
+  padding: var(--space-4) var(--space-5);
+  cursor: pointer;
+  color: var(--color-brand-900);
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.how-it-works-policy-list summary::-webkit-details-marker {
+  display: none;
+}
+
+.how-it-works-policy-list summary::after {
+  margin-left: auto;
+  color: var(--color-brand-700);
+  content: '+';
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-normal);
+}
+
+.how-it-works-policy-list details[open] summary {
+  border-bottom: var(--border-width-thin) solid var(--color-border);
+  background: var(--color-surface-soft);
+}
+
+.how-it-works-policy-list details[open] summary::after {
+  content: '−';
+}
+
+.how-it-works-policy-list summary > span {
+  color: var(--color-lilac-strong);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.how-it-works-policy-list p {
+  max-width: var(--measure-copy);
+  margin: 0;
+  padding: var(--space-5);
+  color: var(--color-text-muted);
+}
+
+.how-it-works-final-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  padding: clamp(var(--space-8), 6vw, var(--space-16));
+  border-radius: var(--radius-xl);
+  background: var(--color-sage);
+}
+
+.how-it-works-final-cta > div:first-child {
+  max-width: var(--measure-copy);
+}
+
+.how-it-works-final-cta .eyebrow {
+  margin-bottom: var(--space-3);
+}
+
+.how-it-works-final-cta p:not(.eyebrow) {
+  margin-top: var(--space-4);
+  color: var(--color-ink);
+}
+
+.how-it-works-final-actions {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+@media (max-width: 64rem) {
+  .how-it-works-journey .process-steps ol,
+  .how-it-works-delivery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 52rem) {
+  .how-it-works-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .how-it-works-final-cta {
+    display: grid;
+  }
+}
+
+@media (max-width: 36rem) {
+  .how-it-works-hero,
+  .how-it-works-delivery,
+  .how-it-works-final-cta {
+    padding: var(--space-6);
+  }
+
+  .how-it-works-journey .process-steps ol,
+  .how-it-works-delivery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .how-it-works-policy-list summary {
+    padding: var(--space-4);
+    font-size: var(--font-size-base);
+  }
+}

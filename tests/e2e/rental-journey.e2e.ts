@@ -48,3 +48,28 @@ test('mobile navigation opens, routes, and closes after a selection', async ({ p
     page.getByRole('button', { name: 'Buka menu utama' }),
   ).toHaveAttribute('aria-expanded', 'false')
 })
+
+test('rental policy disclosures are usable from the How It Works page', async ({ page }) => {
+  await page.goto('/how-it-works')
+
+  await expect(
+    page.getByRole('heading', {
+      name: 'Sewa mudah, konfirmasi tetap jelas lewat WhatsApp.',
+    }),
+  ).toBeVisible()
+
+  const depositPolicy = page
+    .locator('summary')
+    .filter({ hasText: 'Pembayaran & deposit' })
+  await depositPolicy.click()
+  await expect(
+    page.getByText('Semua produk Berswara tidak memakai deposit.', {
+      exact: false,
+    }),
+  ).toBeVisible()
+
+  const whatsAppHref = await page
+    .getByRole('link', { name: 'Tanyakan melalui WhatsApp' })
+    .getAttribute('href')
+  expect(whatsAppHref).toContain('https://wa.me/6281991582500?text=')
+})
