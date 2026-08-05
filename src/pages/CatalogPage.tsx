@@ -19,6 +19,7 @@ import {
   type CatalogSort,
 } from '../utilities/catalogQuery'
 import { getRentalCategoryLabel } from '../utilities/rentalPresentation'
+import { trackAnalyticsEvent } from '../utilities/analytics'
 import { useDocumentMetadata } from '../utilities/useDocumentMetadata'
 import '../styles/catalog.css'
 
@@ -106,7 +107,15 @@ export function CatalogPage() {
       <section className="catalog-controls" aria-label="Cari dan filter katalog">
         <SearchInput
           value={search}
-          onChange={(event) => updateSearchParams({ q: event.target.value })}
+          onChange={(event) => {
+            if (!search.trim() && event.target.value.trim()) {
+              trackAnalyticsEvent({
+                name: 'catalog_search_used',
+                properties: {},
+              })
+            }
+            updateSearchParams({ q: event.target.value })
+          }}
           onClear={() => updateSearchParams({ q: '' })}
           hint="Cari berdasarkan nama, kategori, atau fitur produk."
         />
@@ -118,7 +127,13 @@ export function CatalogPage() {
               value="all"
               selected={category === 'all'}
               count={categoryCounts.all}
-              onClick={() => updateSearchParams({ category: 'all' })}
+              onClick={() => {
+                trackAnalyticsEvent({
+                  name: 'catalog_category_selected',
+                  properties: { category: 'all' },
+                })
+                updateSearchParams({ category: 'all' })
+              }}
             >
               Semua
             </CategoryChip>
@@ -128,7 +143,13 @@ export function CatalogPage() {
                 value={item}
                 selected={category === item}
                 count={categoryCounts[item]}
-                onClick={() => updateSearchParams({ category: item })}
+                onClick={() => {
+                  trackAnalyticsEvent({
+                    name: 'catalog_category_selected',
+                    properties: { category: item },
+                  })
+                  updateSearchParams({ category: item })
+                }}
               >
                 {getRentalCategoryLabel(item)}
               </CategoryChip>
@@ -140,9 +161,14 @@ export function CatalogPage() {
           <span>Urutkan</span>
           <select
             value={sort}
-            onChange={(event) =>
-              updateSearchParams({ sort: event.target.value as CatalogSort })
-            }
+            onChange={(event) => {
+              const selectedSort = event.target.value as CatalogSort
+              trackAnalyticsEvent({
+                name: 'catalog_sort_selected',
+                properties: { sort: selectedSort },
+              })
+              updateSearchParams({ sort: selectedSort })
+            }}
           >
             {sortOptions.map((option) => (
               <option key={option.value} value={option.value}>

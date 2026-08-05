@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { getPublishedRentalProducts } from '../data/rentalProducts'
 import { berswaraBusiness } from '../config/business'
 import { getCanonicalUrl } from '../config/site'
 import type { RentalProduct } from '../types/catalog'
+import { trackAnalyticsEvent } from '../utilities/analytics'
 import {
   getRelatedRentalProducts,
   getRentalProductFromSource,
@@ -30,6 +32,12 @@ function ProductDetailContent({
   product: RentalProduct
   sourceProducts: ReturnType<typeof getPublishedRentalProducts>
 }) {
+  useEffect(() => {
+    trackAnalyticsEvent({
+      name: 'product_detail_viewed',
+      properties: { productSlug: product.slug, category: product.category },
+    })
+  }, [product.category, product.slug])
 
   const path = `/products/${product.slug}`
   const image = product.images[0].sources.large

@@ -139,3 +139,24 @@ Reusable, typed components are exported from `src/components/index.ts` and group
 Availability badges use readable labels and symbols in addition to color. Rental-rate blocks always pair the amount or confirmation placeholder with a duration unit and minimum-period statement.
 
 Run `bun test` for representative component state and formatting coverage. During local development, `/__components` provides a visual story page for responsive and keyboard review; it is omitted from production routing.
+
+## Privacy-conscious analytics
+
+Berswara has a provider-agnostic analytics event layer. It records only these
+safe interaction facts: Home catalog CTA placement, catalog category selection,
+whether search was used (never its query), sort choice, product slug/category,
+How It Works view, and WhatsApp inquiry source/variant/product category.
+
+No analytics event contains a search query, WhatsApp message, requested dates,
+phone number, customer identity, address, or conversation content. Events are
+deduplicated during a client session so React rendering and client navigation do
+not send the same event twice.
+
+No third-party provider is enabled by default. Before connecting one, show the
+consent required by the provider and applicable privacy rules, then call
+`configureAnalytics({ consent: true, sink })`. The `sink` receives only the
+typed, minimal event payload. If consent is absent or a provider fails, the site
+continues browsing and WhatsApp links normally.
+
+For development verification, listen for the local browser event
+`berswara:analytics`; it exposes the same safe payload but does not transmit it.

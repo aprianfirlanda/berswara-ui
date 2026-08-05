@@ -1,6 +1,8 @@
 import { ButtonLink, ProcessSteps } from '../components'
+import { useEffect } from 'react'
 import { berswaraBusiness } from '../config/business'
 import { useDocumentMetadata } from '../utilities/useDocumentMetadata'
+import { trackAnalyticsEvent } from '../utilities/analytics'
 import { buildWhatsAppUrl, trackWhatsAppInquiry } from '../utilities/whatsapp'
 import '../styles/how-it-works.css'
 
@@ -82,6 +84,9 @@ const deliveryOptions = [
 ] as const
 
 export function HowItWorksPage() {
+  useEffect(() => {
+    trackAnalyticsEvent({ name: 'how_it_works_viewed', properties: {} })
+  }, [])
   useDocumentMetadata({
     title: 'Cara sewa & ketentuan rental | Berswara',
     description:

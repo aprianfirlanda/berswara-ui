@@ -11,6 +11,7 @@ import {
 } from '../data/rentalProducts'
 import type { RentalProduct } from '../types/catalog'
 import { getHomeFeaturedProducts } from '../utilities/homePage'
+import { trackAnalyticsEvent } from '../utilities/analytics'
 import { useDocumentMetadata } from '../utilities/useDocumentMetadata'
 
 const categories = [
@@ -90,7 +91,17 @@ export function HomePage() {
             bike untuk menemani keluarga tanpa harus membeli semuanya.
           </p>
           <div className="home-hero-actions">
-            <ButtonLink to="/catalog">Lihat katalog sewa</ButtonLink>
+            <ButtonLink
+              to="/catalog"
+              onClick={() =>
+                trackAnalyticsEvent({
+                  name: 'home_catalog_cta_clicked',
+                  properties: { placement: 'hero' },
+                })
+              }
+            >
+              Lihat katalog sewa
+            </ButtonLink>
             <ButtonLink to="/how-it-works" variant="secondary">
               Pelajari cara sewa
             </ButtonLink>
@@ -171,7 +182,17 @@ export function HomePage() {
             <h2 id="home-featured-heading">Produk pilihan untuk keluarga.</h2>
           </div>
           {featuredProducts.length > 0 ? (
-            <ButtonLink to="/catalog" variant="ghost" size="compact">
+            <ButtonLink
+              to="/catalog"
+              variant="ghost"
+              size="compact"
+              onClick={() =>
+                trackAnalyticsEvent({
+                  name: 'home_catalog_cta_clicked',
+                  properties: { placement: 'featured' },
+                })
+              }
+            >
               Buka katalog →
             </ButtonLink>
           ) : null}
@@ -229,7 +250,17 @@ export function HomePage() {
             untuk diperiksa Berswara.
           </p>
         </div>
-        <ButtonLink to="/catalog">Jelajahi katalog sewa</ButtonLink>
+        <ButtonLink
+          to="/catalog"
+          onClick={() =>
+            trackAnalyticsEvent({
+              name: 'home_catalog_cta_clicked',
+              properties: { placement: 'final-cta' },
+            })
+          }
+        >
+          Jelajahi katalog sewa
+        </ButtonLink>
       </section>
     </div>
   )

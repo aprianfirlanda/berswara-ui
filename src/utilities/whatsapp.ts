@@ -1,4 +1,6 @@
 import { berswaraBusiness } from '../config/business'
+import { trackAnalyticsEvent } from './analytics'
+import { getRentalProductBySlug } from '../data/rentalProducts'
 
 export type WhatsAppInquiryVariant =
   | 'general'
@@ -76,9 +78,24 @@ export function getWhatsAppInquiryEventDetail(
 }
 
 export function trackWhatsAppInquiry(detail: WhatsAppInquiryEventDetail) {
-  window.dispatchEvent(
-    new CustomEvent<WhatsAppInquiryEventDetail>('berswara:whatsapp-inquiry', {
-      detail: getWhatsAppInquiryEventDetail(detail),
-    }),
-  )
+  const safeDetail = getWhatsAppInquiryEventDetail(detail)
+  const category = safeDetail.productSlug
+    ? getRentalProductBySlug(safeDetail.productSlug)?.category
+    : undefined
+
+  trackAnalyticsEvent({
+    name: 'whatsapp_inquiry_clicked',
+    properties: {
+      ...safeDetail,
+      ...(category ? { category } : {}),
+    },
+  })
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent<WhatsAppInquiryEventDetail>('berswara:whatsapp-inquiry', {
+        detail: safeDetail,
+      }),
+    )
+  }
 }
